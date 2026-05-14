@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقارن التمويل الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══ BRAND PALETTE ══ */
+:root{
+  --bg:#1a1a2e;
+  --bg2:#16213e;
+  --card:#1f2b47;
+  --card2:#253354;
+  --primary:#7F5AF0;
+  --primary-dim:rgba(127,90,240,.15);
+  --primary-glow:rgba(127,90,240,.35);
+  --income:#00F5A0;
+  --income-dim:rgba(0,245,160,.12);
+  --expense:#FF6B6B;
+  --expense-dim:rgba(255,107,107,.12);
+  --gold:#F4C430;
+  --gold-dim:rgba(244,196,48,.12);
+  --blue:#3B9EFF;
+  --blue-dim:rgba(59,158,255,.12);
+  --text:#2D2D2D;
+  --text-light:#F3EFFF;
+  --muted:#4F4F4F;
+  --muted-light:rgba(243,239,255,.5);
+  --border:rgba(127,90,240,.18);
+  --border-light:rgba(243,239,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--text-light);min-height:100vh;overflow-x:hidden;}
+
+/* Ambient blobs */
+body::before{content:'';position:fixed;top:-120px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(127,90,240,.12),transparent 70%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;bottom:-100px;left:-60px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(0,245,160,.07),transparent 70%);pointer-events:none;z-index:0;}
+
+.app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:20px 16px 60px;}
+
+/* ══ HEADER ══ */
+.header{text-align:center;padding:28px 0 22px;margin-bottom:24px;}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary-dim);border:1px solid rgba(127,90,240,.35);padding:5px 14px;border-radius:99px;font-size:11px;color:var(--primary);margin-bottom:14px;letter-spacing:.5px;}
+.header h1{font-size:clamp(22px,5vw,32px);font-weight:700;line-height:1.3;background:linear-gradient(135deg,var(--primary),#a78bfa,var(--income));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header p{color:var(--muted-light);font-size:13px;margin-top:6px;}
+
+/* ══ FINANCE TYPE SELECTOR ══ */
+.selector-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px;margin-bottom:24px;display:flex;flex-direction:column;gap:4px;}
+.sel-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;cursor:pointer;transition:all .25s;border:1.5px solid transparent;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
+.sel-option::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--primary-dim),transparent);opacity:0;transition:opacity .25s;border-radius:13px;}
+.sel-option:hover::before{opacity:.6;}
+.sel-option.active{background:var(--primary-dim);border-color:var(--primary);}
+.sel-option.active::before{opacity:1;}
+.sel-radio{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;}
+.sel-option.active .sel-radio{border-color:var(--primary);background:var(--primary);}
+.sel-radio-dot{width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transform:scale(.3);transition:all .25s;}
+.sel-option.active .sel-radio-dot{opacity:1;transform:scale(1);}
+.sel-icon{font-size:22px;flex-shrink:0;}
+.sel-content{flex:1;}
+.sel-title{font-size:14px;font-weight:700;color:var(--text-light);margin-bottom:2px;}
+.sel-desc{font-size:11px;color:var(--muted-light);}
+.sel-badge{padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;flex-shrink:0;}
+.badge-car{background:var(--income-dim);color:var(--income);}
+.badge-re{background:var(--blue-dim);color:var(--blue);}
+.badge-pl{background:var(--primary-dim);color:var(--primary);}
+
+/* ══ CONTENT PANELS ══ */
+.content-panel{display:none;animation:slideUp .3s ease;}
+.content-panel.active{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ SECONDARY TABS ══ */
+.sec-tabs{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;}
+.sec-tab{padding:7px 14px;border-radius:10px;border:1px solid var(--border-light);background:transparent;color:var(--muted-light);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.sec-tab.active{background:var(--primary-dim);border-color:var(--primary);color:var(--primary);}
+.sec-tab:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text-light);}
+
+/* ══ INPUT BLOCK ══ */
+.iblock{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:16px;}
+.btitle{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.btitle.car{color:var(--income);}
+.btitle.re{color:var(--blue);}
+.btitle.pl{color:var(--primary);}
+.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.ig label{display:block;font-size:11px;color:var(--muted-light);margin-bottom:5px;}
+.ig input,.ig select{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--border-light);border-radius:10px;color:var(--text-light);font-family:inherit;font-size:13px;direction:rtl;transition:all .2s;}
+.ig input:focus,.ig select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim);}
+.ig select option{background:var(--bg2);}
+.go-btn{width:100%;margin-top:14px;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.go-btn::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,.2);border-radius:50%;transform:translate(-50%,-50%);transition:width .4s,height .4s,opacity .4s;}
+.go-btn:active::after{width:200px;height:200px;opacity:0;}
+.go-btn.car-btn{background:linear-gradient(135deg,var(--income),#00d68a);color:#0a2e1a;box-shadow:0 4px 20px rgba(0,245,160,.2);}
+.go-btn.re-btn{background:linear-gradient(135deg,var(--blue),#1a7de0);color:#fff;box-shadow:0 4px 20px rgba(59,158,255,.2);}
+.go-btn.pl-btn{background:linear-gradient(135deg,var(--primary),#6b4ca8);color:#fff;box-shadow:0 4px 20px var(--primary-glow);}
+.go-btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
+
+/* ══ WINNER BANNER ══ */
+.winner{border-radius:14px;padding:14px 18px;margin-bottom:16px;display:none;align-items:center;gap:12px;animation:slideUp .3s ease;}
+.winner.show{display:flex;}
+.wi{font-size:26px;}
+.wt h4{font-size:13px;font-weight:700;margin-bottom:3px;}
+.wt p{font-size:12px;color:var(--muted-light);line-height:1.5;}
+
+/* ══ RESULT CARDS ══ */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+@media(max-width:540px){.rgrid{grid-template-columns:1fr;}}
+.rc{background:var(--card);border:1px solid var(--border-light);border-radius:16px;padding:16px;position:relative;overflow:hidden;transition:transform .2s;}
+.rc:hover{transform:translateY(-2px);}
+.rc::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;transform:translate(15px,-15px);}
+.rc.ij::before{background:radial-gradient(circle,rgba(0,245,160,.18),transparent);}
+.rc.mu::before{background:radial-gradient(circle,rgba(244,196,48,.18),transparent);}
+.clbl{font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:99px;display:inline-block;margin-bottom:9px;}
+.ij .clbl{background:var(--income-dim);color:var(--income);}
+.mu .clbl{background:var(--gold-dim);color:var(--gold);}
+.cval{font-size:24px;font-weight:700;font-family:'Space Mono',monospace;margin:5px 0;}
+.ij .cval{color:var(--income);}
+.mu .cval{color:var(--gold);}
+.csub{font-size:11px;color:var(--muted-light);margin-bottom:9px;}
+.rr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border-light);font-size:12px;}
+.rr:last-child{border-bottom:none;}
+.rv{font-weight:600;}
+.rv.g{color:var(--income);}.rv.w{color:var(--gold);}.rv.b{color:var(--expense);}
+
+/* ══ COMPARE BARS ══ */
+.csec{margin-bottom:16px;}
+.stitle{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;display:flex;align-items:center;gap:7px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
+.ci{margin-bottom:12px;}
+.cl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.cl span:first-child{color:var(--muted-light);}
+.cbars{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.cbar{height:8px;border-radius:4px;background:rgba(255,255,255,.05);overflow:hidden;}
+.cf{height:100%;border-radius:4px;transition:width 1s ease .2s;}
+.cfi{background:linear-gradient(90deg,var(--income),#00d68a);}
+.cfm{background:linear-gradient(90deg,var(--gold),#e8a820);}
+.cbl{font-size:10px;color:var(--muted-light);margin-top:2px;text-align:center;}
+
+/* ══ COMMANDS ══ */
+.cmd-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.cbtn{padding:7px 11px;border-radius:9px;border:1px solid var(--border-light);background:var(--card);color:var(--muted-light);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.cbtn:hover,.cbtn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-dim);}
+.cmd-out{background:var(--card2);border:1px solid rgba(127,90,240,.3);border-radius:14px;padding:18px;margin-bottom:16px;display:none;}
+.cmd-out.show{display:block;animation:slideUp .3s ease;}
+.cout-title{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;}
+
+/* ══ BANKS TABLE ══ */
+.banks-table{width:100%;border-collapse:collapse;}
+.banks-table th{background:var(--bg2);padding:8px 11px;font-size:10px;font-weight:600;color:var(--muted-light);text-align:right;}
+.banks-table td{padding:9px 11px;font-size:11px;border-bottom:1px solid var(--border-light);}
+.banks-table tr:hover td{background:rgba(127,90,240,.04);}
+.rb{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:700;}
+.r1{background:rgba(255,215,0,.2);color:#ffd700;}.r2{background:rgba(192,192,192,.2);color:#c0c0c0;}.r3{background:rgba(205,127,50,.2);color:#cd7f32;}.ro{background:rgba(255,255,255,.07);color:var(--muted-light);}
+.rbar{display:flex;align-items:center;gap:5px;}
+.rfill{height:5px;border-radius:2px;background:linear-gradient(90deg,var(--income),var(--blue));}
+.tg{padding:2px 6px;border-radius:99px;font-size:10px;}
+.tgg{background:var(--income-dim);color:var(--income);}
+.tgm{background:var(--gold-dim);color:var(--gold);}
+.tgb{background:var(--expense-dim);color:var(--expense);}
+
+/* ══ BUDGET ══ */
+.bvis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;}
+.bvi{background:var(--bg2);border-radius:10px;padding:12px 14px;border-right:3px solid var(--border-light);}
+.bvi.hi{border-right-color:var(--gold);}.bvi.sf{border-right-color:var(--income);}
+.bvl{font-size:10px;color:var(--muted-light);margin-bottom:3px;}
+.bvv{font-size:15px;font-weight:700;font-family:'Space Mono',monospace;}
+.bvs{font-size:10px;color:var(--muted-light);margin-top:2px;}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;}
+@media(max-width:480px){.agrid{grid-template-columns:1fr;}}
+.acard{background:var(--bg2);border-radius:10px;padding:13px;}
+.acard h5{font-size:11px;color:var(--muted-light);margin-bottom:7px;}
+.av{font-size:15px;font-weight:700;font-family:'Space Mono',monospace;margin-bottom:3px;}
+.ai{color:var(--income);}.am{color:var(--gold);}
+.sbts{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.sbt{padding:6px 13px;border-radius:99px;border:1px solid var(--border-light);background:transparent;color:var(--muted-light);font-family:inherit;font-size:12px;cursor:pointer;transition:all .2s;}
+.sbt.active{background:linear-gradient(135deg,var(--primary),#6b4ca8);border-color:transparent;color:#fff;font-weight:600;}
+.sbt:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text-light);}
+
+/* ══ GOALS ══ */
+.ggrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;}
+.gcard{background:var(--card);border:1px solid var(--border-light);border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;}
+.gcard:hover{transform:translateY(-3px);border-color:var(--primary);box-shadow:0 8px 24px var(--primary-glow);}
+.gcard.sel{border-color:var(--primary);background:var(--card2);}
+.gr{font-size:15px;font-weight:700;margin-bottom:3px;}
+.gl2{font-size:11px;color:var(--muted-light);margin-bottom:9px;}
+.gex{font-size:11px;color:var(--income);margin-bottom:11px;line-height:1.7;}
+.pb{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.pf{height:100%;border-radius:3px;transition:width 1.2s ease;}
+.gstats{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:11px;}
+.gs{background:var(--bg2);border-radius:7px;padding:6px 8px;}
+.gs .gsl{font-size:9px;color:var(--muted-light);margin-bottom:2px;}
+.gs .gsv{font-size:11px;font-weight:700;font-family:'Space Mono',monospace;}
+
+/* ══ TIP ══ */
+.tip{background:var(--primary-dim);border:1px solid rgba(127,90,240,.25);border-radius:10px;padding:11px 14px;font-size:11px;color:var(--muted-light);line-height:1.6;margin-top:12px;}
+.tip strong{color:var(--primary);}
+
+/* ══ CMD OUTPUT CONTENT ══ */
+.pc2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:520px){.pc2{grid-template-columns:1fr;}}
+.pci{font-size:11px;color:var(--muted-light);padding:4px 0;border-bottom:1px solid var(--border-light);display:flex;align-items:flex-start;gap:5px;line-height:1.5;}
+.pci:last-child{border-bottom:none;}
+.evr{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border-light);font-size:12px;}
+.evr:last-child{border-bottom:none;}
+.evbw{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.evbf{height:100%;border-radius:3px;}
+.scl{font-size:10px;font-weight:700;width:26px;text-align:center;}
+.recc{background:var(--bg2);border-radius:11px;padding:14px;margin-bottom:9px;}
+.recc h5{font-size:12px;font-weight:700;margin-bottom:6px;}
+.recc p{font-size:11px;color:var(--muted-light);line-height:1.6;}
+.bri{background:var(--bg2);border-radius:9px;padding:11px 13px;margin-bottom:7px;font-size:11px;color:var(--muted-light);display:flex;gap:9px;line-height:1.5;}
+.brn{color:var(--primary);font-weight:700;font-size:12px;}
+.solvs{padding:9px 0;border-bottom:1px solid var(--border-light);display:flex;gap:10px;}
+.solvs:last-child{border-bottom:none;}
+.solv-n{width:22px;height:22px;background:var(--gold-dim);color:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.solv-t{font-size:11px;color:var(--muted-light);line-height:1.6;}
+.chal{padding:9px 0;border-bottom:1px solid var(--border-light);}
+.chal:last-child{border-bottom:none;}
+.chal .myth{color:var(--expense);font-weight:600;font-size:11px;margin-bottom:3px;}
+.chal .truth{color:var(--income);font-size:11px;line-height:1.5;}
+
+.mono{font-family:'Space Mono',monospace;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:rgba(127,90,240,.3);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ HEADER ══ -->
+<div class="header">
+  <div class="badge">🇸🇦 السوق السعودي · 2026</div>
+  <h1>مقارن التمويل الذكي</h1>
+  <p>اختر نوع التمويل · احسب · قارن · اتخذ قرارك</p>
+</div>
+
+<!-- ══ FINANCE TYPE SELECTOR ══ -->
+<div class="selector-box">
+  <div class="sel-option active" id="sel-car" onclick="selectType('car')">
+    <div class="sel-radio"><div class="sel-radio-dot"></div></div>
+    <div class="sel-icon">🚗</div>
+    <div class="sel-content">
+      <div class="sel-title">تمويل السيارات</div>
+      <div class="sel-desc">إيجار تمويلي · مرابحة · مقارنة شاملة</div>
+    </div>
+    <span class="sel-badge badge-car">حتى 500K</span>
+  </div>
+  <div class="sel-option" id="sel-re" onclick="selectType('re')">
+    <div class="sel-radio"><div class="sel-radio-dot"></div></div>
+    <div class="sel-icon">🏠</div>
+    <div class="sel-content">
+      <div class="sel-title">التمويل العقاري</div>
+      <div class="sel-desc">صندوق التنمية · دعم وافي · أفضل البنوك</div>
+    </div>
+    <span class="sel-badge badge-re">🔥 أولوية</span>
+  </div>
+  <div class="sel-option" id="sel-pl" onclick="selectType('pl')">
+    <div class="sel-radio"><div class="sel-radio-dot"></div></div>
+    <div class="sel-icon">💳</div>
+    <div class="sel-content">
+      <div class="sel-title">تمويل شخصي</div>
+      <div class="sel-desc">سداد ديون · مناسبات · تحسينات منزلية</div>
+    </div>
+    <span class="sel-badge badge-pl">+50K</span>
+  </div>
+</div>
+
+<!-- ══ AWARENESS MESSAGE ══ -->
+<div id="awareness-msg" style="border-radius:14px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.8;transition:all .3s;"></div>
+
+<script>
+const awarenessMessages={
+  car:{
+    color:'var(--income)',
+    bg:'rgba(0,245,160,.07)',
+    border:'rgba(0,245,160,.2)',
+    icon:'🚗',
+    title:'قارن عروض تمويل السيارات',
+    points:['اختر أفضل عرض من حيث التكلفة الإجمالية','قارن بين الإيجار التمويلي والمرابحة','اعرف نسبتك من الراتب قبل الالتزام']
+  },
+  re:{
+    color:'var(--blue)',
+    bg:'rgba(59,158,255,.07)',
+    border:'rgba(59,158,255,.2)',
+    icon:'🏠',
+    title:'امتلك منزل أحلامك',
+    points:['قارن أفضل خيارات التمويل العقاري في السعودية','اختر واحتسب قدرتك المالية قبل التقديم','قدّم وفق احتياجاتك السكنية بأعلى شفافية']
+  },
+  pl:{
+    color:'var(--primary)',
+    bg:'rgba(127,90,240,.07)',
+    border:'rgba(127,90,240,.2)',
+    icon:'💳',
+    title:'تمويل شخصي يناسب إمكانياتك',
+    points:['قارن تكلفة التمويل والرسوم بشفافية','اختر مدة سداد تناسب ميزانيتك','تأكد من مطابقتك لشروط الأهلية قبل التقديم']
+  }
+};
+function updateAwareness(type){
+  const m=awarenessMessages[type];
+  document.getElementById('awareness-msg').style.background=m.bg;
+  document.getElementById('awareness-msg').style.border='1px solid '+m.border;
+  document.getElementById('awareness-msg').innerHTML=
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'+
+    '<span style="font-size:20px">'+m.icon+'</span>'+
+    '<strong style="color:'+m.color+';font-size:14px">'+m.title+'</strong></div>'+
+    m.points.map(p=>'<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;color:var(--muted-light)"><span style="color:'+m.color+';margin-top:1px">✦</span><span>'+p+'</span></div>').join('');
+}
+updateAwareness('car');
+</script>
+<div class="sec-tabs">
+  <button class="sec-tab active" id="stab-calc" onclick="showSecTab('calc',this)">🧮 الحاسبة</button>
+  <button class="sec-tab" id="stab-banks" onclick="showSecTab('banks',this)">🏦 البنوك</button>
+  <button class="sec-tab" id="stab-budget" onclick="showSecTab('budget',this)">💰 ميزانيتي</button>
+  <button class="sec-tab" id="stab-goals" onclick="showSecTab('goals',this)">🎯 الأهداف</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CALC PANEL
+══════════════════════════════════════════ -->
+<div class="content-panel active" id="cp-calc">
+
+  <!-- CAR INPUTS -->
+  <div id="car-inputs" class="iblock">
+    <div class="btitle car">🚗 بيانات السيارة</div>
+    <!-- Hidden APR fields with defaults -->
+    <input type="hidden" id="ijarahRate" value="16.90">
+    <input type="hidden" id="murabahaRate" value="15.33">
+    <input type="hidden" id="balloon" value="45000">
+    <div class="igrid">
+      <div class="ig"><label>قيمة السيارة (﷼)</label><input type="number" id="carPrice" value="150000" min="20000" max="500000" step="5000"></div>
+      <div class="ig"><label>مدة التمويل</label><select id="duration"><option value="1">سنة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5" selected>5 سنوات</option></select></div>
+      <div class="ig"><label>دخلك الشهري (﷼)</label><input type="number" id="salary" value="12000" step="500" min="2500"></div>
+    </div>
+    <button class="go-btn car-btn" onclick="calculate()">احسب مقارنة السيارة 🚗</button>
+  </div>
+
+  <!-- RE INPUTS -->
+  <div id="re-inputs" class="iblock" style="display:none;border-color:rgba(59,158,255,.2)">
+    <div class="btitle re">🏠 بيانات العقار</div>
+    <div style="display:flex;align-items:center;gap:8px;background:var(--blue-dim);border:1px solid rgba(59,158,255,.2);border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:11px;color:var(--blue)">🔥 أولوية عالية · يشمل صندوق التنمية + دعم وافي</div>
+    <!-- Hidden APR -->
+    <input type="hidden" id="re-rate" value="5.5">
+    <div class="igrid">
+      <div class="ig"><label>قيمة العقار (﷼)</label><input type="number" id="re-price" value="600000" min="100000" max="3000000" step="50000"></div>
+      <div class="ig"><label>الدفعة الأولى (﷼)</label><input type="number" id="re-down" value="120000" min="0" step="10000"></div>
+      <div class="ig"><label>مدة التمويل</label><select id="re-dur"><option value="5">5 سنوات</option><option value="10">10 سنوات</option><option value="15">15 سنوات</option><option value="20" selected>20 سنة</option><option value="25">25 سنة</option><option value="30">30 سنة</option></select></div>
+      <div class="ig"><label>التزامات أخرى (﷼/شهر)</label><input type="number" id="re-fund" value="0" step="100" min="0"></div>
+      <div class="ig"><label>دخلك الشهري (﷼)</label><input type="number" id="re-sal" value="15000" step="500" min="3000"></div>
+    </div>
+    <button class="go-btn re-btn" onclick="calcRE()">احسب التمويل العقاري 🏠</button>
+  </div>
+
+  <!-- PL INPUTS -->
+  <div id="pl-inputs" class="iblock" style="display:none;border-color:rgba(127,90,240,.2)">
+    <div class="btitle pl">💳 بيانات التمويل الشخصي</div>
+    <div style="display:flex;align-items:center;gap:8px;background:var(--primary-dim);border:1px solid rgba(127,90,240,.2);border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:11px;color:var(--primary)">💡 تمويل 50,000 – 300,000 ﷼ · سداد ديون · مناسبات · تحسينات</div>
+    <!-- Hidden APR -->
+    <input type="hidden" id="pl-rate" value="12.0">
+    <div class="igrid">
+      <div class="ig"><label>مبلغ التمويل (﷼)</label><input type="number" id="pl-amount" value="100000" min="50000" max="300000" step="10000"></div>
+      <div class="ig"><label>مدة السداد</label><select id="pl-dur"><option value="1">سنة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5" selected>5 سنوات</option></select></div>
+      <div class="ig"><label>دخلك الشهري (﷼)</label><input type="number" id="pl-sal" value="12000" step="500" min="3000"></div>
+      <div class="ig"><label>الغرض</label><select id="pl-purpose"><option value="debt">سداد ديون</option><option value="home">تحسينات منزلية</option><option value="event">مناسبة</option><option value="downpayment">دفعة أولى</option><option value="other">أخرى</option></select></div>
+      <div class="ig"><label>القطاع</label><select id="pl-sector"><option value="gov">حكومي</option><option value="private">خاص</option><option value="retired">متقاعد</option></select></div>
+    </div>
+    <button class="go-btn pl-btn" onclick="calcPL()">احسب التمويل الشخصي 💳</button>
+  </div>
+
+  <!-- COMMANDS (car only) -->
+  <div id="cmdWrap" style="display:none">
+    <div class="stitle" style="margin-bottom:8px">⚡ أوامر ذكية</div>
+    <div class="cmd-bar">
+      <button class="cbtn" onclick="runCmd('compare',this)">🔀 /compare</button>
+      <button class="cbtn" onclick="runCmd('pros-cons',this)">⚖️ /pros-cons</button>
+      <button class="cbtn" onclick="runCmd('evaluate',this)">📊 /evaluate</button>
+      <button class="cbtn" onclick="runCmd('recommend',this)">🏆 /recommend</button>
+      <button class="cbtn" onclick="runCmd('brainstorm',this)">💡 /brainstorm</button>
+      <button class="cbtn" onclick="runCmd('solve',this)">🔧 /solve</button>
+      <button class="cbtn" onclick="runCmd('challenge',this)">🎯 /challenge</button>
+    </div>
+  </div>
+  <div class="cmd-out" id="cmdOut"><div class="cout-title" id="coutTitle">📋</div><div id="coutBody"></div></div>
+
+  <!-- WINNER -->
+  <div class="winner" id="winBanner">
+    <div class="wi" id="wIcon">🏆</div>
+    <div class="wt"><h4 id="wTitle"></h4><p id="wDesc"></p></div>
+  </div>
+
+  <!-- CAR RESULTS -->
+  <div id="car-results" style="display:none">
+    <div class="rgrid">
+      <div class="rc ij">
+        <span class="clbl">إيجار تمويلي</span>
+        <div class="cval" id="iv">—</div><div class="csub">قسط شهري</div>
+        <div class="rr"><span>APR</span><span class="rv w" id="ir">—</span></div>
+        <div class="rr"><span>الدفعة البالون</span><span class="rv w" id="ib">—</span></div>
+        <div class="rr"><span>إجمالي المدفوع</span><span class="rv" id="it">—</span></div>
+        <div class="rr"><span>إجمالي الأرباح</span><span class="rv b" id="ip">—</span></div>
+        <div class="rr"><span>نسبة من الراتب</span><span class="rv" id="ira">—</span></div>
+        <div class="rr"><span>الملكية</span><span class="rv w">بعد نهاية العقد</span></div>
+        <div class="rr"><span>كفيل</span><span class="rv g">لا ✓</span></div>
+      </div>
+      <div class="rc mu">
+        <span class="clbl">مرابحة</span>
+        <div class="cval" id="mv">—</div><div class="csub">قسط شهري</div>
+        <div class="rr"><span>APR</span><span class="rv w" id="mr">—</span></div>
+        <div class="rr"><span>الدفعة البالون</span><span class="rv g">لا يوجد ✓</span></div>
+        <div class="rr"><span>إجمالي المدفوع</span><span class="rv" id="mt">—</span></div>
+        <div class="rr"><span>إجمالي الأرباح</span><span class="rv b" id="mp">—</span></div>
+        <div class="rr"><span>نسبة من الراتب</span><span class="rv" id="mra">—</span></div>
+        <div class="rr"><span>الملكية</span><span class="rv g">فورية ✓</span></div>
+        <div class="rr"><span>كفيل</span><span class="rv b">في بعض البنوك</span></div>
+      </div>
+    </div>
+    <div class="csec">
+      <div class="stitle">📊 مقارنة مرئية</div>
+      <div class="ci"><div class="cl"><span>القسط الشهري</span><span id="bv1" class="mono" style="font-size:10px"></span></div><div class="cbars"><div><div class="cbar"><div class="cf cfi" id="bi1"></div></div><div class="cbl">إيجار</div></div><div><div class="cbar"><div class="cf cfm" id="bm1"></div></div><div class="cbl">مرابحة</div></div></div></div>
+      <div class="ci"><div class="cl"><span>إجمالي التكلفة</span><span id="bv2" class="mono" style="font-size:10px"></span></div><div class="cbars"><div><div class="cbar"><div class="cf cfi" id="bi2"></div></div><div class="cbl">إيجار</div></div><div><div class="cbar"><div class="cf cfm" id="bm2"></div></div><div class="cbl">مرابحة</div></div></div></div>
+      <div class="ci"><div class="cl"><span>إجمالي الأرباح</span><span id="bv3" class="mono" style="font-size:10px"></span></div><div class="cbars"><div><div class="cbar"><div class="cf cfi" id="bi3"></div></div><div class="cbl">إيجار</div></div><div><div class="cbar"><div class="cf cfm" id="bm3"></div></div><div class="cbl">مرابحة</div></div></div></div>
+      <div class="tip"><strong>💡 قاعدة:</strong> قارن التكلفة الإجمالية دائماً، وليس القسط الشهري فقط.</div>
+    </div>
+  </div>
+
+  <!-- RE RESULTS -->
+  <div id="re-results" style="display:none">
+    <div style="background:var(--blue-dim);border:1px solid rgba(59,158,255,.3);border-radius:13px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:26px">🏠</div>
+      <div><h4 style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px" id="re-wt">ملخص</h4><p style="font-size:12px;color:var(--muted-light);line-height:1.5" id="re-wd"></p></div>
+    </div>
+    <div class="rgrid" id="re-cards"></div>
+    <div class="tip"><strong>📌 وافي:</strong> دعم شهري يصل لـ 2,500 ﷼. سجّل على <strong>eservices.housing.gov.sa</strong></div>
+  </div>
+
+  <!-- PL RESULTS -->
+  <div id="pl-results" style="display:none">
+    <div style="background:var(--primary-dim);border:1px solid rgba(127,90,240,.3);border-radius:13px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:26px">💳</div>
+      <div><h4 style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:3px" id="pl-wt">ملخص</h4><p style="font-size:12px;color:var(--muted-light);line-height:1.5" id="pl-wd"></p></div>
+    </div>
+    <div class="rgrid" id="pl-cards"></div>
+    <div class="stitle">📊 مقارنة السيناريوهات</div>
+    <div id="pl-scenarios" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-bottom:16px;"></div>
+    <div class="tip"><strong>💡 نصيحة:</strong> قارن 3 بنوك على الأقل وتحقق من شرط السداد المبكر.</div>
+  </div>
+
+  <div id="emtSt" style="text-align:center;padding:48px 20px;color:var(--muted-light)">
+    <div style="font-size:48px;margin-bottom:14px;opacity:.25">💡</div>
+    <p style="font-size:13px">اختر نوع التمويل واضغط "احسب"</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BANKS PANEL
+══════════════════════════════════════════ -->
+<div class="content-panel" id="cp-banks">
+  <div class="iblock">
+    <div class="btitle pl">🎛️ فلترة</div>
+    <div class="igrid">
+      <div class="ig"><label>نوع التمويل</label><select id="bkFlt" onchange="renderBanks()"><option value="all">الكل</option><option value="ijarah">إيجار</option><option value="murabaha">مرابحة</option></select></div>
+      <div class="ig"><label>الجنسية</label><select id="natFlt" onchange="renderBanks()"><option value="all">الكل</option><option value="saudi">سعوديون</option><option value="both">سعوديون + مقيمون</option></select></div>
+      <div class="ig"><label>ترتيب حسب</label><select id="srtFlt" onchange="renderBanks()"><option value="rate">أقل APR</option><option value="salary">أقل راتب</option><option value="rank">التصنيف</option></select></div>
+    </div>
+  </div>
+  <div class="stitle">🏆 تصنيف جهات التمويل 2026</div>
+  <div style="overflow-x:auto"><table class="banks-table"><thead><tr><th>#</th><th>الجهة</th><th>النوع</th><th>أقل APR</th><th>أقل راتب</th><th>خدمة (خاص)</th><th>الجنسية</th><th>كفيل</th></tr></thead><tbody id="bkBody"></tbody></table></div>
+  <div class="tip" style="margin-top:12px"><strong>📌</strong> النسب تقديرية — تحقق على <strong>yallacompare.com</strong> أو <strong>arib.com.sa</strong></div>
+
+  <div class="stitle" style="margin-top:20px">🏠 أفضل البنوك العقارية</div>
+  <div style="overflow-x:auto"><table class="banks-table"><thead><tr><th>#</th><th>البنك</th><th>أقل APR</th><th>أقل دفعة أولى</th><th>أقصى مدة</th><th>صندوق التنمية</th></tr></thead><tbody id="re-banks-body"></tbody></table></div>
+
+  <div class="stitle" style="margin-top:20px">💳 أفضل البنوك للتمويل الشخصي</div>
+  <div style="overflow-x:auto"><table class="banks-table"><thead><tr><th>#</th><th>البنك</th><th>أقل APR</th><th>أقصى مبلغ</th><th>أقل راتب</th><th>الرسوم</th></tr></thead><tbody id="pl-banks-body"></tbody></table></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BUDGET PANEL
+══════════════════════════════════════════ -->
+<div class="content-panel" id="cp-budget">
+  <div class="iblock">
+    <div class="btitle pl">💼 شريحة راتبك</div>
+    <div class="sbts" id="sbtns">
+      <button class="sbt" onclick="selSal(3500,this)">3,500</button>
+      <button class="sbt" onclick="selSal(5000,this)">5,000</button>
+      <button class="sbt" onclick="selSal(7000,this)">7,000</button>
+      <button class="sbt active" onclick="selSal(10000,this)">10,000</button>
+      <button class="sbt" onclick="selSal(15000,this)">15,000</button>
+      <button class="sbt" onclick="selSal(20000,this)">20,000</button>
+      <button class="sbt" onclick="selSal(25000,this)">25,000</button>
+    </div>
+    <div class="bvis" id="bVis"></div>
+    <div style="margin-top:18px"><div class="stitle">🚗 السيارة المناسبة (5 سنوات)</div><div class="agrid" id="aGrid"></div></div>
+    <div class="tip"><strong>📐 قاعدة ساما:</strong> لا تتجاوز الأقساط <strong>33%</strong> للخاص و<strong>45%</strong> للحكومي.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     GOALS PANEL
+══════════════════════════════════════════ -->
+<div class="content-panel" id="cp-goals">
+  <div class="stitle">🎯 اختر نطاق سعر السيارة</div>
+  <div class="ggrid" id="gGrid"></div>
+  <div id="gDet" style="display:none">
+    <div class="stitle">📋 جدول التمويل التفصيلي</div>
+    <div id="gRes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;"></div>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<script>
+// ══ DATA ══
+const banks=[
+  {name:'إمارات دبي الوطني',type:'ijarah',minRate:2.75,minSalary:4000,servicePrivate:3,nationality:'both',guarantor:false,rank:1,note:'أقل نسبة — شروط ائتمانية صارمة'},
+  {name:'منصة سيارة',type:'ijarah',minRate:3.99,minSalary:4000,servicePrivate:3,nationality:'both',guarantor:false,rank:2,note:'موافقة رقمية سريعة'},
+  {name:'البنك العربي (ANB)',type:'ijarah',minRate:3.99,minSalary:3000,servicePrivate:1,nationality:'both',guarantor:false,rank:2,note:'مرونة عالية وقبول واسع'},
+  {name:'البنك الأهلي (SNB)',type:'both',minRate:6.0,minSalary:4000,servicePrivate:3,nationality:'both',guarantor:false,rank:4,note:'باقات متكاملة'},
+  {name:'بنك الرياض',type:'both',minRate:6.5,minSalary:4000,servicePrivate:3,nationality:'saudi',guarantor:false,rank:5,note:'مرن للعملاء المحوّلين'},
+  {name:'البنك الفرنسي (BSF)',type:'both',minRate:7.0,minSalary:5000,servicePrivate:3,nationality:'both',guarantor:false,rank:6,note:'فترات سداد ممتدة'},
+  {name:'بنك البلاد',type:'murabaha',minRate:7.5,minSalary:4000,servicePrivate:3,nationality:'saudi',guarantor:false,rank:7,note:'متوافق شريعة بالكامل'},
+  {name:'مصرف الراجحي',type:'murabaha',minRate:8.5,minSalary:5000,servicePrivate:6,nationality:'saudi',guarantor:false,rank:3,note:'الأكثر ثقة'},
+  {name:'عبد اللطيف جميل (ALJ)',type:'both',minRate:12.0,minSalary:2500,servicePrivate:1,nationality:'both',guarantor:'اختياري',rank:8,note:'أسهل أهلية'},
+  {name:'راية للتمويل',type:'both',minRate:15.33,minSalary:7000,servicePrivate:6,nationality:'saudi',guarantor:false,rank:9,note:'مرابحة 15.33% · إيجار 16.90%'},
+];
+const reBanks=[
+  {name:'البنك الأهلي (SNB)',rate:3.75,down:10,maxYrs:30,fund:true,note:'الأفضل مع صندوق التنمية'},
+  {name:'بنك الرياض',rate:3.99,down:10,maxYrs:30,fund:true,note:'تمويل يصل 90% من قيمة العقار'},
+  {name:'مصرف الراجحي',rate:4.25,down:10,maxYrs:30,fund:true,note:'إجراءات سريعة — مرابحة عقارية'},
+  {name:'البنك العربي (ANB)',rate:4.50,down:15,maxYrs:25,fund:true,note:'مرونة في التقييم'},
+  {name:'بنك البلاد',rate:4.75,down:15,maxYrs:25,fund:true,note:'متوافق مع الشريعة'},
+  {name:'البنك الفرنسي (BSF)',rate:5.00,down:20,maxYrs:20,fund:false,note:'للدخل المرتفع'},
+];
+const plBanks=[
+  {name:'البنك الأهلي (SNB)',rate:5.99,maxAmt:300000,minSal:4000,fees:'1%',note:'أقل نسبة للعملاء المميزين'},
+  {name:'بنك الرياض',rate:6.50,maxAmt:300000,minSal:4000,fees:'1%',note:'موافقة سريعة'},
+  {name:'البنك العربي (ANB)',rate:7.00,maxAmt:250000,minSal:3000,fees:'لا توجد',note:'رسوم صفر لبعض العملاء'},
+  {name:'مصرف الراجحي',rate:7.50,maxAmt:300000,minSal:5000,fees:'1%',note:'متوافق مع الشريعة'},
+  {name:'بنك البلاد',rate:8.00,maxAmt:200000,minSal:4000,fees:'1.5%',note:'مرونة في الأهلية'},
+  {name:'البنك الفرنسي (BSF)',rate:8.50,maxAmt:300000,minSal:5000,fees:'1%',note:'للتمويلات الكبيرة'},
+  {name:'عبد اللطيف جميل (ALJ)',rate:10.0,maxAmt:150000,minSal:2500,fees:'لا توجد',note:'الأسهل في الأهلية'},
+];
+const goals=[
+  {range:'أقل من 100K',min:50000,max:99000,label:'سيارات اقتصادية',color:'#00F5A0',examples:'يارس · أكسنت · بيكانتو · صني'},
+  {range:'100K – 150K',min:100000,max:150000,label:'سيارات متوسطة',color:'#3B9EFF',examples:'كورولا · سيفيك · سوناتا · K5'},
+  {range:'150K – 200K',min:150000,max:200000,label:'سيارات مريحة',color:'#7F5AF0',examples:'كامري · مازدا 6 · أزيرا'},
+  {range:'200K – 300K',min:200000,max:300000,label:'سيارات فاخرة',color:'#F4C430',examples:'راف 4 · لكزس IS · BMW 3 · C-Class'},
+];
+
+// ══ HELPERS ══
+const fmt=n=>Math.round(n).toLocaleString('ar-SA')+' ﷼';
+const pct=n=>n.toFixed(1)+'%';
+function calcMo(pr,apr,mo){const r=apr/100/12;if(!r)return pr/mo;return pr*r*Math.pow(1+r,mo)/(Math.pow(1+r,mo)-1);}
+function calcMax(pay,apr,mo,bal){const r=apr/100/12;if(!r)return pay*mo+bal;const pv=(Math.pow(1+r,mo)-1)/(r*Math.pow(1+r,mo));return pay*pv+bal/Math.pow(1+r,mo);}
+function sb(id,v,mx){const e=document.getElementById(id);if(e)e.style.width=(v/mx*93)+'%';}
+
+// ══ TYPE SELECTOR ══
+let activeType='car';
+function selectType(type){
+  activeType=type;
+  ['car','re','pl'].forEach(t=>{
+    document.getElementById('sel-'+t).classList.toggle('active',t===type);
+    const inp=document.getElementById(t+'-inputs');
+    if(inp)inp.style.display=t===type?'block':'none';
+    const res=document.getElementById(t+'-results');
+    if(res)res.style.display='none';
+  });
+  document.getElementById('emtSt').style.display='block';
+  document.getElementById('winBanner').classList.remove('show');
+  document.getElementById('cmdWrap').style.display='none';
+  document.getElementById('cmdOut').classList.remove('show');
+  updateAwareness(type);
+}
+
+// ══ SECONDARY TABS ══
+function showSecTab(id,btn){
+  document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sec-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('cp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══ CAR CALCULATOR ══
+let S={};
+function calculate(){
+  const price=+document.getElementById('carPrice').value||150000;
+  const dur=+document.getElementById('duration').value;
+  const ir=+document.getElementById('ijarahRate').value||16.9;
+  const mr=+document.getElementById('murabahaRate').value||15.33;
+  const bal=+document.getElementById('balloon').value||0;
+  const sal=+document.getElementById('salary').value||10000;
+  const mo=dur*12;
+  const ib=Math.max(price-bal,5000);
+  const im=calcMo(ib,ir,mo),it=im*mo+bal,ip=it-price,ira=im/sal*100;
+  const mm=calcMo(price,mr,mo),mt=mm*mo,mp=mt-price,mra=mm/sal*100;
+  S={price,dur,ir,mr,bal,sal,mo,im,it,ip,ira,mm,mt,mp,mra};
+  document.getElementById('iv').textContent=fmt(im);
+  document.getElementById('ir').textContent=pct(ir);
+  document.getElementById('ib').textContent=fmt(bal);
+  document.getElementById('it').textContent=fmt(it);
+  document.getElementById('ip').textContent=fmt(ip);
+  const ie=document.getElementById('ira');ie.textContent=pct(ira);ie.className='rv '+(ira>33?'b':ira>25?'w':'g');
+  document.getElementById('mv').textContent=fmt(mm);
+  document.getElementById('mr').textContent=pct(mr);
+  document.getElementById('mt').textContent=fmt(mt);
+  document.getElementById('mp').textContent=fmt(mp);
+  const me=document.getElementById('mra');me.textContent=pct(mra);me.className='rv '+(mra>33?'b':mra>25?'w':'g');
+  document.getElementById('car-results').style.display='block';
+  document.getElementById('emtSt').style.display='none';
+  document.getElementById('cmdWrap').style.display='block';
+  document.getElementById('cmdOut').classList.remove('show');
+  const maxM=Math.max(im,mm),maxT=Math.max(it,mt),maxP=Math.max(ip,mp);
+  setTimeout(()=>{sb('bi1',im,maxM);sb('bm1',mm,maxM);sb('bi2',it,maxT);sb('bm2',mt,maxT);sb('bi3',ip,maxP);sb('bm3',mp,maxP);},60);
+  document.getElementById('bv1').textContent='إيجار '+fmt(im)+' | مرابحة '+fmt(mm);
+  document.getElementById('bv2').textContent='إيجار '+fmt(it)+' | مرابحة '+fmt(mt);
+  document.getElementById('bv3').textContent='إيجار '+fmt(ip)+' | مرابحة '+fmt(mp);
+  const bn=document.getElementById('winBanner');bn.classList.add('show');
+  let wi,wt,wd,wc;
+  if(ira>33&&mra>33){wi='⚠️';wt='تحذير مالي';wd='كلا الخيارين يتجاوز 33% من راتبك. خفّض قيمة السيارة أو زد الدفعة الأولى.';wc='rgba(255,107,107,.1)';}
+  else if(it<=mt){wi='🟢';wt='الإيجار التمويلي أوفر';wd='أوفر بـ '+fmt(mt-it)+'. لكن لا تنسَ دفعة البالون '+fmt(bal)+' في نهاية العقد.';wc='rgba(0,245,160,.08)';}
+  else{wi='🟡';wt='المرابحة أوفر';wd='ملكية فورية وأوفر بـ '+fmt(it-mt)+' إجمالياً. بدون مفاجآت نهاية العقد.';wc='rgba(244,196,48,.08)';}
+  bn.style.background=wc;
+  document.getElementById('wIcon').textContent=wi;
+  document.getElementById('wTitle').textContent=wt;
+  document.getElementById('wDesc').textContent=wd;
+  bn.querySelector('h4').style.color=wi==='⚠️'?'var(--expense)':wi==='🟢'?'var(--income)':'var(--gold)';
+}
+
+// ══ RE CALCULATOR ══
+function calcRE(){
+  const price=+document.getElementById('re-price').value||600000;
+  const down=+document.getElementById('re-down').value||120000;
+  const yrs=+document.getElementById('re-dur').value||20;
+  const apr=+document.getElementById('re-rate').value||5.5;
+  const fund=+document.getElementById('re-fund').value||0;
+  const sal=+document.getElementById('re-sal').value||15000;
+  const principal=Math.max(price-down,1000);
+  const months=yrs*12;
+  const monthly=calcMo(principal,apr,months);
+  const net=Math.max(monthly-fund,0);
+  const total=monthly*months+down;
+  const profit=total-price;
+  const ratio=net/sal*100;
+  const downPct=(down/price*100).toFixed(1);
+  document.getElementById('re-results').style.display='block';
+  document.getElementById('emtSt').style.display='none';
+  document.getElementById('re-cards').innerHTML=
+    '<div class="rc" style="border-color:rgba(59,158,255,.25)"><span class="clbl" style="background:rgba(59,158,255,.12);color:var(--blue)">التمويل العقاري</span><div class="cval" style="color:var(--blue)">'+fmt(monthly)+'</div><div class="csub">قسط شهري كامل</div><div class="rr"><span>القسط بعد الالتزامات</span><span class="rv g">'+fmt(net)+'</span></div><div class="rr"><span>مبلغ التمويل</span><span class="rv w">'+fmt(principal)+'</span></div><div class="rr"><span>إجمالي المدفوع</span><span class="rv">'+fmt(total)+'</span></div><div class="rr"><span>إجمالي الأرباح</span><span class="rv b">'+fmt(profit)+'</span></div><div class="rr"><span>APR المطبق</span><span class="rv w">'+apr+'%</span></div><div class="rr"><span>نسبة من الراتب</span><span class="rv '+(ratio>33?'b':ratio>25?'w':'g')+'">'+ratio.toFixed(1)+'%</span></div></div>'+
+    '<div class="rc" style="border-color:rgba(59,158,255,.15)"><span class="clbl" style="background:rgba(59,158,255,.1);color:var(--blue)">تحليل التكلفة</span><div class="cval" style="color:var(--gold);font-size:20px">'+fmt(price)+'</div><div class="csub">قيمة العقار</div><div class="rr"><span>الدفعة الأولى</span><span class="rv w">'+fmt(down)+' ('+downPct+'%)</span></div><div class="rr"><span>التزامات أخرى/شهر</span><span class="rv '+(fund>0?'b':'g')+'">'+fmt(fund)+'</span></div><div class="rr"><span>إجمالي الالتزامات</span><span class="rv '+(fund>0?'b':'g')+'">'+fmt(fund*months)+'</span></div><div class="rr"><span>المدة</span><span class="rv">'+yrs+' سنة</span></div></div>';
+  document.getElementById('re-wt').textContent=ratio>33?'تنبيه مالي ⚠️':'التمويل مناسب ✅';
+  document.getElementById('re-wd').textContent=ratio>45?'القسط يتجاوز 45% من راتبك — ارفع الدفعة الأولى أو مدّد المدة.':ratio>33?'تنبيه: '+ratio.toFixed(1)+'% من راتبك. يُنصح بعدم تجاوز 33%.':'القسط الصافي '+fmt(net)+' ('+ratio.toFixed(1)+'% من راتبك) — ضمن النطاق الآمن.';
+}
+
+// ══ PL CALCULATOR ══
+function calcPL(){
+  const amt=+document.getElementById('pl-amount').value||100000;
+  const yrs=+document.getElementById('pl-dur').value||5;
+  const apr=+document.getElementById('pl-rate').value||12;
+  const sal=+document.getElementById('pl-sal').value||12000;
+  const purpose=document.getElementById('pl-purpose').value;
+  const sector=document.getElementById('pl-sector').value;
+  const months=yrs*12;
+  const monthly=calcMo(amt,apr,months);
+  const total=monthly*months;
+  const profit=total-amt;
+  const ratio=monthly/sal*100;
+  const pL={debt:'سداد ديون',home:'تحسينات',event:'مناسبة',downpayment:'دفعة أولى',other:'أخرى'};
+  const sL={gov:'حكومي',private:'خاص',retired:'متقاعد'};
+  document.getElementById('pl-results').style.display='block';
+  document.getElementById('emtSt').style.display='none';
+  document.getElementById('pl-cards').innerHTML=
+    '<div class="rc" style="border-color:rgba(127,90,240,.25)"><span class="clbl" style="background:var(--primary-dim);color:var(--primary)">التمويل الشخصي</span><div class="cval" style="color:var(--primary)">'+fmt(monthly)+'</div><div class="csub">قسط · '+yrs+' سنوات</div><div class="rr"><span>مبلغ التمويل</span><span class="rv w">'+fmt(amt)+'</span></div><div class="rr"><span>إجمالي المدفوع</span><span class="rv">'+fmt(total)+'</span></div><div class="rr"><span>إجمالي الأرباح</span><span class="rv b">'+fmt(profit)+'</span></div><div class="rr"><span>نسبة من الراتب</span><span class="rv '+(ratio>33?'b':ratio>25?'w':'g')+'">'+ratio.toFixed(1)+'%</span></div><div class="rr"><span>الغرض</span><span class="rv w">'+(pL[purpose]||purpose)+'</span></div></div>'+
+    '<div class="rc" style="border-color:rgba(127,90,240,.15)"><span class="clbl" style="background:rgba(127,90,240,.1);color:var(--primary)">الفائدة المدفوعة</span><div class="cval" style="color:var(--expense);font-size:20px">'+fmt(profit)+'</div><div class="csub">فوق الأصل</div><div class="rr"><span>نسبة الأرباح</span><span class="rv b">'+(profit/amt*100).toFixed(1)+'%</span></div><div class="rr"><span>تكلفة كل 1,000 ﷼</span><span class="rv w">'+Math.round(profit/amt*1000).toLocaleString('ar-SA')+'</span></div><div class="rr"><span>APR</span><span class="rv w">'+apr+'%</span></div><div class="rr"><span>الملاءة</span><span class="rv '+(ratio<=33?'g':'b')+'">'+(ratio<=33?'مناسب ✅':'مرتفع ⚠️')+'</span></div></div>';
+  const scens=[{y:3},{y:5},{y:7}];
+  document.getElementById('pl-scenarios').innerHTML=scens.map(sc=>{
+    const m2=calcMo(amt,apr,sc.y*12),t2=m2*sc.y*12,cur=sc.y===yrs;
+    return '<div style="background:'+(cur?'rgba(127,90,240,.12)':'var(--bg2)')+';border:1.5px solid '+(cur?'var(--primary)':'var(--border-light)')+';border-radius:11px;padding:12px;text-align:center"><div style="font-size:10px;color:var(--muted-light);margin-bottom:4px">'+sc.y+' سنوات'+(cur?' ✓':'')+' </div><div style="font-size:15px;font-weight:700;font-family:Space Mono,monospace;color:'+(cur?'var(--primary)':'var(--text-light)')+'">'+Math.round(m2).toLocaleString('ar-SA')+' ﷼</div><div style="font-size:10px;color:var(--muted-light);margin-top:3px">إجمالي: '+Math.round(t2/1000).toFixed(0)+'K</div></div>';
+  }).join('');
+  document.getElementById('pl-wt').textContent=ratio>33?'تنبيه مالي ⚠️':'التمويل مقبول ✅';
+  document.getElementById('pl-wd').textContent=ratio>33?'القسط '+ratio.toFixed(1)+'% من راتبك — فكّر في تمديد المدة أو تخفيض المبلغ.':'القسط '+fmt(monthly)+' ('+ratio.toFixed(1)+'%). قارن 3 بنوك لتوفير أكثر.';
+}
+
+// ══ COMMANDS ══
+function runCmd(cmd,btn){
+  if(!S.price){calculate();return;}
+  document.querySelectorAll('.cbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const{price,ir,mr,bal,sal,im,it,ip,ira,mm,mt,mp,mra}=S;
+  let html='',title='';
+  if(cmd==='compare'){
+    title='🔀 /compare';
+    html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:11px"><div style="background:rgba(0,245,160,.07);border:1px solid rgba(0,245,160,.2);border-radius:11px;padding:13px"><div style="color:var(--income);font-weight:700;font-size:11px;margin-bottom:8px">🟢 الإيجار</div><div style="font-size:11px;color:var(--muted-light);line-height:1.9">قسط: <strong style="color:var(--income)">'+fmt(im)+'</strong><br>إجمالي: '+fmt(it)+'<br>أرباح: <strong style="color:var(--expense)">'+fmt(ip)+'</strong><br>بالون: <strong style="color:var(--gold)">'+fmt(bal)+'</strong></div></div><div style="background:rgba(244,196,48,.07);border:1px solid rgba(244,196,48,.2);border-radius:11px;padding:13px"><div style="color:var(--gold);font-weight:700;font-size:11px;margin-bottom:8px">🟡 مرابحة</div><div style="font-size:11px;color:var(--muted-light);line-height:1.9">قسط: <strong style="color:var(--gold)">'+fmt(mm)+'</strong><br>إجمالي: '+fmt(mt)+'<br>أرباح: <strong style="color:var(--expense)">'+fmt(mp)+'</strong><br>بالون: <strong style="color:var(--income)">لا يوجد</strong></div></div></div><div style="margin-top:10px;background:var(--bg2);border-radius:9px;padding:11px;font-size:11px;color:var(--muted-light)">'+(it<mt?'⚡ الإيجار أوفر بـ <strong style="color:var(--income)">'+fmt(mt-it)+'</strong>':'⚡ المرابحة أوفر بـ <strong style="color:var(--gold)">'+fmt(it-mt)+'</strong>')+'</div>';
+  } else if(cmd==='pros-cons'){
+    title='⚖️ /pros-cons';
+    html='<div class="pc2"><div><div style="color:var(--income);font-weight:700;font-size:11px;margin-bottom:8px;padding:5px 9px;background:rgba(0,245,160,.07);border-radius:7px">🟢 الإيجار</div><div style="background:rgba(0,245,160,.04);border-radius:9px;padding:10px;margin-bottom:7px"><div style="font-size:10px;color:var(--income);margin-bottom:6px">✅ مزايا</div>'+['قسط شهري أخف','شروط أهلية أسهل','بدون كفيل غالباً','متاح للمقيمين'].map(p=>'<div class="pci">✅ '+p+'</div>').join('')+'</div><div style="background:rgba(255,107,107,.04);border-radius:9px;padding:10px"><div style="font-size:10px;color:var(--expense);margin-bottom:6px">❌ عيوب</div>'+['بالون '+fmt(bal)+' في النهاية','APR أعلى','ملكية مؤجلة'].map(p=>'<div class="pci">❌ '+p+'</div>').join('')+'</div></div><div><div style="color:var(--gold);font-weight:700;font-size:11px;margin-bottom:8px;padding:5px 9px;background:rgba(244,196,48,.07);border-radius:7px">🟡 مرابحة</div><div style="background:rgba(244,196,48,.04);border-radius:9px;padding:10px;margin-bottom:7px"><div style="font-size:10px;color:var(--gold);margin-bottom:6px">✅ مزايا</div>'+['ملكية فورية','لا دفعة نهائية','شفافية أعلى'].map(p=>'<div class="pci">✅ '+p+'</div>').join('')+'</div><div style="background:rgba(255,107,107,.04);border-radius:9px;padding:10px"><div style="font-size:10px;color:var(--expense);margin-bottom:6px">❌ عيوب</div>'+['قسط شهري أعلى','كفيل في بعض البنوك'].map(p=>'<div class="pci">❌ '+p+'</div>').join('')+'</div></div></div>';
+  } else if(cmd==='evaluate'){
+    title='📊 /evaluate';
+    const crit=[{l:'القسط الشهري',i:im<mm?85:55,m:mm<=im?85:55},{l:'التكلفة الإجمالية',i:it<mt?80:50,m:mt<=it?80:50},{l:'سهولة الحصول',i:75,m:60},{l:'الملكية',i:50,m:85},{l:'المرونة',i:70,m:65},{l:'الشفافية',i:55,m:80}];
+    const iA=Math.round(crit.reduce((a,c)=>a+c.i,0)/crit.length);
+    const mA=Math.round(crit.reduce((a,c)=>a+c.m,0)/crit.length);
+    html='<div style="margin-bottom:12px">'+crit.map(c=>'<div class="evr"><span style="width:110px;font-size:11px;color:var(--muted-light)">'+c.l+'</span><div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:5px"><div><div class="evbw"><div class="evbf" style="width:'+c.i+'%;background:var(--income)"></div></div><div style="font-size:9px;color:var(--muted-light);margin-top:1px">إيجار</div></div><div><div class="evbw"><div class="evbf" style="width:'+c.m+'%;background:var(--gold)"></div></div><div style="font-size:9px;color:var(--muted-light);margin-top:1px">مرابحة</div></div></div><span class="scl" style="color:var(--income)">'+c.i+'</span><span class="scl" style="color:var(--gold)">'+c.m+'</span></div>').join('')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><div style="background:rgba(0,245,160,.07);border-radius:9px;padding:11px;text-align:center"><div style="font-size:10px;color:var(--muted-light)">إيجار</div><div style="font-size:28px;font-weight:700;color:var(--income)">'+iA+'</div></div><div style="background:rgba(244,196,48,.07);border-radius:9px;padding:11px;text-align:center"><div style="font-size:10px;color:var(--muted-light)">مرابحة</div><div style="font-size:28px;font-weight:700;color:var(--gold)">'+mA+'</div></div></div>';
+  } else if(cmd==='recommend'){
+    title='🏆 /recommend';
+    html='<div class="recc" style="border-right:3px solid var(--gold)"><h5 style="color:var(--gold)">🎯 التوصية</h5><p>'+(ira>33&&mra>33?'⚠️ كلا الخيارين يتجاوز 33% من راتبك. خفّض قيمة السيارة.':it<mt?'اختر <strong style="color:var(--income)">الإيجار</strong> — أوفر بـ '+fmt(mt-it)+'. لكن احتفظ بـ '+fmt(bal)+' لنهاية العقد.':'اختر <strong style="color:var(--gold)">المرابحة</strong> — ملكية فورية وأوفر بـ '+fmt(it-mt)+'.')+'</p></div><div class="recc" style="border-right:3px solid var(--income)"><h5 style="color:var(--income)">💼 حسب راتبك</h5><p>'+(sal<7000?'ابحث عن ALJ أو راية (تقبل من 2,500 ﷼). فكّر في سيارة أرخص.':'راتبك يؤهلك لجميع البنوك. ركّز على أقل APR.')+'</p></div><div class="recc" style="border-right:3px solid var(--primary)"><h5 style="color:var(--primary)">🏦 أفضل بنك</h5><p>'+(sal>=4000?'ANB أو EDO للإيجار (من 2.75%). البنك الأهلي أو الرياض للمرابحة.':'ALJ — يقبل راتب من 2,500 ﷼.')+'</p></div>';
+  } else if(cmd==='brainstorm'){
+    title='💡 /brainstorm';
+    html=[{n:'01',t:'دفعة أولى أعلى',d:'20% دفعة أولى ('+fmt(price*.2)+') توفر عليك كثيراً.'},{n:'02',t:'مدة أقصر',d:'3 سنوات بدل 5 = أرباح أقل بكثير.'},{n:'03',t:'تحسين السجل الائتماني',d:'APR أقل بـ 1-2% = آلاف الريالات توفيراً.'},{n:'04',t:'قارن 3 بنوك',d:'yallacompare.com أو arib.com.sa'},{n:'05',t:'العروض الموسمية',d:'رمضان، اليوم الوطني — حوافز حقيقية.'},{n:'06',t:'السيارات الكهربائية',d:'بعض البنوك تقدم APR أقل مع رؤية 2030.'}].map(i=>'<div class="bri"><span class="brn">'+i.n+'</span><div><strong style="color:var(--text-light)">'+i.t+'</strong><br>'+i.d+'</div></div>').join('');
+  } else if(cmd==='solve'){
+    title='🔧 /solve';
+    html='<div>'+['حدّد ميزانيتك: راتبك × 33% = '+fmt(sal*.33)+' أقصى قسط.','قرر النوع: مدخرات للبالون → إيجار. تفضل الوضوح → مرابحة.','قارن 3 بنوك على الأقل بنفس المبلغ والمدة.','اشترط شرط السداد المبكر.','تقدّم خلال موسم عروض.'].map((s,i)=>'<div class="solvs"><div class="solv-n">'+(i+1)+'</div><div class="solv-t">'+s+'</div></div>').join('')+'</div>';
+  } else if(cmd==='challenge'){
+    title='🎯 /challenge';
+    html='<div>'+[{myth:'الإيجار دائماً أوفر',truth:'البالون يقلب الحسبة — احسب الإجمالي.'},{myth:'المرابحة دائماً أغلى',truth:'في حالات كثيرة هي أوفر إجمالاً.'},{myth:'أطول مدة = أقل تكلفة',truth:'أطول مدة = أرباح أكثر. المدة القصيرة توفر.'},{myth:'كل البنوك نفس النسبة',truth:'فرق 2.75% و16.9% = عشرات الآلاف.'},{myth:'السجل الائتماني لا يؤثر',truth:'سجل جيد = APR أقل = آلاف توفيراً.'}].map(c=>'<div class="chal"><div class="myth">❌ "'+c.myth+'"</div><div class="truth">✅ '+c.truth+'</div></div>').join('')+'</div>';
+  }
+  document.getElementById('coutTitle').textContent=title;
+  document.getElementById('coutBody').innerHTML=html;
+  const out=document.getElementById('cmdOut');
+  out.classList.add('show');
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ══ BANKS ══
+function renderBanks(){
+  const ft=document.getElementById('bkFlt').value;
+  const fn=document.getElementById('natFlt').value;
+  const fs=document.getElementById('srtFlt').value;
+  let d=[...banks];
+  if(ft!=='all')d=d.filter(b=>b.type===ft||b.type==='both');
+  if(fn==='both')d=d.filter(b=>b.nationality==='both');
+  if(fn==='saudi')d=d.filter(b=>b.nationality==='saudi'||b.nationality==='both');
+  if(fs==='rate')d.sort((a,b)=>a.minRate-b.minRate);
+  else if(fs==='salary')d.sort((a,b)=>a.minSalary-b.minSalary);
+  else d.sort((a,b)=>a.rank-b.rank);
+  const mx=Math.max(...d.map(b=>b.minRate));
+  document.getElementById('bkBody').innerHTML=d.map((b,i)=>{
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'ro';
+    const bw=Math.round(b.minRate/mx*65);
+    const tg=b.minRate<6?'<span class="tg tgg">ممتاز</span>':b.minRate<10?'<span class="tg tgm">جيد</span>':'<span class="tg tgb">مرتفع</span>';
+    const tl=b.type==='ijarah'?'🟢 إيجار':b.type==='murabaha'?'🟡 مرابحة':'🔵 كلاهما';
+    const gl=b.guarantor===false?'<span class="tg tgg">لا</span>':b.guarantor==='اختياري'?'<span class="tg tgm">اختياري</span>':'<span class="tg tgb">نعم</span>';
+    return '<tr><td><span class="rb '+rc+'">'+(i+1)+'</span></td><td><strong>'+b.name+'</strong><br><span style="font-size:10px;color:var(--muted-light)">'+b.note+'</span></td><td>'+tl+'</td><td><div class="rbar"><div class="rfill" style="width:'+bw+'px"></div><span class="mono" style="font-size:11px">'+b.minRate+'%</span></div>'+tg+'</td><td class="mono">'+b.minSalary.toLocaleString('ar-SA')+' ﷼</td><td>'+(b.servicePrivate===1?'31 يوم':b.servicePrivate+' أشهر')+'</td><td>'+(b.nationality==='both'?'🌍 الكل':'🇸🇦 سعودي')+'</td><td>'+gl+'</td></tr>';
+  }).join('');
+  // RE banks
+  document.getElementById('re-banks-body').innerHTML=reBanks.map((b,i)=>{
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'ro';
+    return '<tr><td><span class="rb '+rc+'">'+(i+1)+'</span></td><td><strong>'+b.name+'</strong><br><span style="font-size:10px;color:var(--muted-light)">'+b.note+'</span></td><td><span class="mono">'+b.rate+'%</span> <span class="tg tgg">ممتاز</span></td><td class="mono">'+b.down+'%</td><td class="mono">'+b.maxYrs+' سنة</td><td>'+(b.fund?'<span class="tg tgg">متاح</span>':'<span class="tg tgb">غير متاح</span>')+'</td></tr>';
+  }).join('');
+  // PL banks
+  document.getElementById('pl-banks-body').innerHTML=plBanks.map((b,i)=>{
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'ro';
+    const tg=b.rate<7?'<span class="tg tgg">ممتاز</span>':b.rate<9?'<span class="tg tgm">جيد</span>':'<span class="tg tgb">مقبول</span>';
+    return '<tr><td><span class="rb '+rc+'">'+(i+1)+'</span></td><td><strong>'+b.name+'</strong><br><span style="font-size:10px;color:var(--muted-light)">'+b.note+'</span></td><td><span class="mono">'+b.rate+'%</span> '+tg+'</td><td class="mono">'+(b.maxAmt/1000).toFixed(0)+'K</td><td class="mono">'+b.minSal.toLocaleString('ar-SA')+'</td><td>'+b.fees+'</td></tr>';
+  }).join('');
+}
+
+// ══ BUDGET ══
+let curSal=10000;
+function selSal(v,btn){curSal=v;document.querySelectorAll('.sbt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderBudget();}
+function renderBudget(){
+  const s=curSal,maxQ=s*.33,sfQ=s*.25;
+  const iM=calcMax(maxQ,16.9,60,45000),mM=calcMax(maxQ,15.33,60,0);
+  const iS=calcMax(sfQ,16.9,60,45000),mS=calcMax(sfQ,15.33,60,0);
+  const cap=v=>v>300000?'+300,000':(Math.round(v/5000)*5000).toLocaleString('ar-SA');
+  document.getElementById('bVis').innerHTML=
+    '<div class="bvi hi"><div class="bvl">الراتب</div><div class="bvv" style="color:var(--gold)">'+s.toLocaleString('ar-SA')+' ﷼</div></div>'+
+    '<div class="bvi sf"><div class="bvl">أقصى قسط (33%)</div><div class="bvv" style="color:var(--income)">'+Math.round(maxQ).toLocaleString('ar-SA')+' ﷼</div><div class="bvs">حد ساما</div></div>'+
+    '<div class="bvi sf"><div class="bvl">قسط مريح (25%)</div><div class="bvv" style="color:var(--income)">'+Math.round(sfQ).toLocaleString('ar-SA')+' ﷼</div><div class="bvs">موصى به</div></div>'+
+    '<div class="bvi"><div class="bvl">يتبقى بعد القسط</div><div class="bvv">'+Math.round(s-maxQ).toLocaleString('ar-SA')+' ﷼</div></div>';
+  document.getElementById('aGrid').innerHTML=
+    '<div class="acard"><h5>🟢 إيجار — الحد الأقصى</h5><div class="av ai">'+cap(iM)+' ﷼</div><div style="font-size:10px;color:var(--muted-light)">عند قسط '+Math.round(maxQ).toLocaleString()+' ﷼/شهر</div><div style="margin-top:5px;font-size:10px;color:var(--income)">✅ آمن: حتى '+cap(iS)+' ﷼</div></div>'+
+    '<div class="acard"><h5>🟡 مرابحة — الحد الأقصى</h5><div class="av am">'+cap(mM)+' ﷼</div><div style="font-size:10px;color:var(--muted-light)">عند قسط '+Math.round(maxQ).toLocaleString()+' ﷼/شهر</div><div style="margin-top:5px;font-size:10px;color:var(--gold)">✅ آمن: حتى '+cap(mS)+' ﷼</div></div>';
+}
+
+// ══ GOALS ══
+function renderGoals(){
+  document.getElementById('gGrid').innerHTML=goals.map((g,i)=>{
+    const mid=(g.min+g.max)/2;
+    const im2=calcMo(Math.max(mid-45000,5000),16.9,60);
+    const mm2=calcMo(mid,15.33,60);
+    const prog=Math.round((i+1)/goals.length*100);
+    return '<div class="gcard" id="gc'+i+'" onclick="showGoal('+i+')"><div class="gr" style="color:'+g.color+'">'+g.range+' ﷼</div><div class="gl2">'+g.label+'</div><div class="gex">'+g.examples+'</div><div class="pb"><div class="pf" style="background:'+g.color+';width:'+prog+'%"></div></div><div class="gstats"><div class="gs"><div class="gsl">إيجار/شهر</div><div class="gsv" style="color:var(--income)">'+Math.round(im2).toLocaleString('ar-SA')+'</div></div><div class="gs"><div class="gsl">مرابحة/شهر</div><div class="gsv" style="color:var(--gold)">'+Math.round(mm2).toLocaleString('ar-SA')+'</div></div><div class="gs"><div class="gsl">المدة</div><div class="gsv">5 سنوات</div></div><div class="gs"><div class="gsl">سعر مرجعي</div><div class="gsv">'+(mid/1000).toFixed(0)+'K</div></div></div></div>';
+  }).join('');
+}
+function showGoal(i){
+  document.querySelectorAll('.gcard').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('gc'+i).classList.add('sel');
+  const g=goals[i];
+  const html=[g.min,Math.round((g.min+g.max)/2),g.max].map(p=>{
+    const im2=calcMo(Math.max(p-45000,5000),16.9,60);
+    const mm2=calcMo(p,15.33,60);
+    return '<div class="rc ij" style="padding:13px"><span class="clbl" style="font-size:9px">إيجار · '+p.toLocaleString('ar-SA')+'</span><div class="cval" style="font-size:18px">'+Math.round(im2).toLocaleString('ar-SA')+' ﷼</div><div class="csub">إجمالي: '+Math.round(im2*60+45000).toLocaleString('ar-SA')+' ﷼</div></div><div class="rc mu" style="padding:13px"><span class="clbl" style="font-size:9px">مرابحة · '+p.toLocaleString('ar-SA')+'</span><div class="cval" style="font-size:18px">'+Math.round(mm2).toLocaleString('ar-SA')+' ﷼</div><div class="csub">إجمالي: '+Math.round(mm2*60).toLocaleString('ar-SA')+' ﷼</div></div>';
+  }).join('');
+  document.getElementById('gRes').innerHTML=html;
+  document.getElementById('gDet').style.display='block';
+  document.getElementById('gDet').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ══ INIT ══
+renderBanks();renderBudget();renderGoals();
+</script>
+</body>
+</html>
