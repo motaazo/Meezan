@@ -1,950 +1,546 @@
-/* =============================================
-   MEEZAN — ميزان
-   Design System: Refined Minimal | Arabic RTL
-   Colors: Deep Teal + Warm Gold + Neutral
-   Font: Cairo (headings) + Tajawal (body)
-   ============================================= */
-
-/* ===== VARIABLES ===== */
-:root {
-  --teal-900: #0d2b2b;
-  --teal-800: #103d3d;
-  --teal-700: #145252;
-  --teal-600: #1a6b6b;
-  --teal-500: #1f8080;
-  --teal-400: #28a0a0;
-  --teal-300: #4dbdbd;
-  --teal-100: #e6f5f5;
-  --teal-50:  #f0fafa;
-
-  --gold-500: #c9943a;
-  --gold-400: #dda84a;
-  --gold-300: #e8be72;
-  --gold-100: #fdf5e6;
-
-  --neutral-900: #1a1a1a;
-  --neutral-700: #3d3d3d;
-  --neutral-500: #6b6b6b;
-  --neutral-300: #b0b0b0;
-  --neutral-100: #f2f2f2;
-  --neutral-50:  #fafafa;
-  --white: #ffffff;
-
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
-  --shadow-md: 0 6px 24px rgba(0,0,0,0.10);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,0.13);
-
-  --transition: 0.25s ease;
-}
-
-/* ===== RESET ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Tajawal', 'Cairo', sans-serif;
-  font-size: 16px;
-  color: var(--neutral-900);
-  background: var(--white);
-  direction: rtl;
-  text-align: right;
-  line-height: 1.7;
-}
-
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; display: block; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
-input, textarea { font-family: inherit; }
-
-/* ===== CONTAINER ===== */
-.container {
-  max-width: 1160px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* ===== SECTION BASE ===== */
-.section {
-  padding: 90px 0;
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 28px;
-  border-radius: var(--radius-md);
-  font-family: 'Cairo', sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  transition: all var(--transition);
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: var(--teal-500);
-  color: var(--white);
-  box-shadow: 0 4px 16px rgba(31,128,128,0.25);
-}
-.btn-primary:hover {
-  background: var(--teal-400);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(31,128,128,0.35);
-}
-
-.btn-secondary {
-  background: var(--teal-50);
-  color: var(--teal-600);
-  border: 1.5px solid var(--teal-300);
-}
-.btn-secondary:hover {
-  background: var(--teal-100);
-  transform: translateY(-2px);
-}
-
-.btn-nav {
-  background: var(--teal-900);
-  color: var(--white);
-  padding: 10px 22px;
-  font-size: 14px;
-}
-.btn-nav:hover { background: var(--teal-700); }
-
-.btn-white {
-  background: var(--white);
-  color: var(--teal-700);
-  font-weight: 700;
-  box-shadow: var(--shadow-md);
-}
-.btn-white:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-.full-width { width: 100%; justify-content: center; }
-
-/* ===== NAVBAR ===== */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  padding: 0 0;
-}
-
-.nav-inner {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  height: 70px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Cairo', sans-serif;
-  font-weight: 900;
-  font-size: 22px;
-  color: var(--teal-800);
-  flex-shrink: 0;
-}
-.logo-icon { font-size: 24px; }
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  justify-content: center;
-}
-
-.nav-links a {
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--neutral-700);
-  transition: all var(--transition);
-}
-.nav-links a:hover {
-  color: var(--teal-600);
-  background: var(--teal-50);
-}
-
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  padding: 8px;
-}
-.menu-toggle span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--neutral-700);
-  border-radius: 2px;
-  transition: var(--transition);
-}
-
-/* ===== HERO ===== */
-.hero {
-  min-height: 90vh;
-  display: flex;
-  align-items: center;
-  background: linear-gradient(145deg, var(--teal-900) 0%, var(--teal-700) 55%, var(--teal-500) 100%);
-  position: relative;
-  overflow: hidden;
-  padding: 80px 0;
-}
-
-.hero-bg-shape {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.08;
-  background: var(--white);
-  pointer-events: none;
-}
-.shape-1 { width: 600px; height: 600px; top: -200px; left: -150px; }
-.shape-2 { width: 400px; height: 400px; bottom: -100px; right: -80px; }
-
-.hero-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 580px;
-}
-
-.hero-badge {
-  display: inline-block;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--gold-300);
-  padding: 6px 16px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  backdrop-filter: blur(4px);
-}
-
-.hero-title {
-  font-family: 'Cairo', sans-serif;
-  font-size: clamp(36px, 5vw, 58px);
-  font-weight: 900;
-  color: var(--white);
-  line-height: 1.25;
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
-}
-.hero-title .highlight {
-  color: var(--gold-300);
-  position: relative;
-}
-
-.hero-subtitle {
-  font-size: 17px;
-  color: rgba(255,255,255,0.78);
-  line-height: 1.8;
-  margin-bottom: 36px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-bottom: 50px;
-}
-
-.hero-stats {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.stat { text-align: center; }
-.stat-num {
-  display: block;
-  font-family: 'Cairo', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--gold-300);
-}
-.stat-label {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-}
-.stat-divider {
-  width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.2);
-}
-
-/* Hero floating cards */
-.hero-visual {
-  position: absolute;
-  left: 8%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-.card-float {
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-lg);
-  padding: 20px 26px;
-  color: var(--white);
-  width: 200px;
-  box-shadow: var(--shadow-lg);
-}
-
-.card-a {
-  margin-bottom: 20px;
-  animation: floatA 4s ease-in-out infinite;
-}
-.card-b {
-  margin-right: 40px;
-  animation: floatB 4s ease-in-out infinite 0.5s;
-}
-
-.card-label {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 6px;
-}
-.card-value {
-  font-family: 'Cairo', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.card-tag {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-}
-.card-tag.green { background: rgba(46,213,115,0.25); color: #7eeaad; }
-.card-tag.gray  { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
-
-.vs-badge {
-  position: absolute;
-  top: 50%;
-  right: -18px;
-  transform: translateY(-50%);
-  background: var(--gold-500);
-  color: var(--white);
-  font-family: 'Cairo', sans-serif;
-  font-weight: 900;
-  font-size: 13px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-md);
-}
-
-@keyframes floatA {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes floatB {
-  0%, 100% { transform: translateY(0px) translateX(40px); }
-  50% { transform: translateY(8px) translateX(40px); }
-}
-
-/* ===== SECTION HEADER ===== */
-.section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-.section-tag {
-  display: inline-block;
-  background: var(--teal-100);
-  color: var(--teal-600);
-  padding: 5px 14px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 14px;
-}
-.section-title {
-  font-family: 'Cairo', sans-serif;
-  font-size: clamp(26px, 4vw, 38px);
-  font-weight: 900;
-  color: var(--neutral-900);
-  line-height: 1.3;
-  margin-bottom: 12px;
-}
-.section-desc {
-  font-size: 16px;
-  color: var(--neutral-500);
-}
-
-/* ===== FEATURES ===== */
-.features { background: var(--neutral-50); }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-
-.feature-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px;
-  border: 1.5px solid transparent;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition);
-}
-.feature-card:hover {
-  border-color: var(--teal-300);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-}
-.feature-card.featured {
-  background: var(--teal-900);
-  color: var(--white);
-  border-color: var(--teal-700);
-}
-.feature-card.featured h3 { color: var(--white); }
-.feature-card.featured p  { color: rgba(255,255,255,0.7); }
-
-.feature-icon {
-  font-size: 36px;
-  margin-bottom: 16px;
-}
-.feature-card h3 {
-  font-family: 'Cairo', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--neutral-900);
-  margin-bottom: 8px;
-}
-.feature-card p {
-  font-size: 14px;
-  color: var(--neutral-500);
-  line-height: 1.7;
-}
-
-/* ===== HOW IT WORKS ===== */
-.how { background: var(--white); }
-
-.steps {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.step {
-  background: var(--white);
-  border: 1.5px solid var(--neutral-100);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px;
-  text-align: center;
-  flex: 1;
-  min-width: 200px;
-  max-width: 260px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition);
-}
-.step:hover {
-  border-color: var(--teal-300);
-  box-shadow: var(--shadow-md);
-}
-
-.step-num {
-  width: 52px;
-  height: 52px;
-  background: linear-gradient(135deg, var(--teal-500), var(--teal-300));
-  color: var(--white);
-  font-family: 'Cairo', sans-serif;
-  font-size: 22px;
-  font-weight: 900;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-}
-
-.step h3 {
-  font-family: 'Cairo', sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.step p { font-size: 14px; color: var(--neutral-500); }
-
-.step-arrow {
-  font-size: 28px;
-  color: var(--teal-300);
-  font-weight: 300;
-  flex-shrink: 0;
-}
-
-/* ===== COMPARE SECTION ===== */
-.compare-section { background: var(--teal-50); }
-
-.compare-card {
-  background: var(--white);
-  border-radius: var(--radius-xl);
-  padding: 48px 40px;
-  box-shadow: var(--shadow-lg);
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 40px;
-  align-items: start;
-  border: 1px solid var(--teal-100);
-}
-
-.col-title {
-  font-family: 'Cairo', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--teal-700);
-  margin-bottom: 24px;
-  padding-bottom: 14px;
-  border-bottom: 2px solid var(--teal-100);
-}
-
-.input-group {
-  margin-bottom: 18px;
-}
-.input-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--neutral-600);
-  margin-bottom: 8px;
-}
-
-.input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1.5px solid var(--neutral-200, #e0e0e0);
-  border-radius: var(--radius-md);
-  font-size: 15px;
-  font-family: 'Tajawal', sans-serif;
-  color: var(--neutral-900);
-  background: var(--neutral-50);
-  transition: border-color var(--transition);
-  outline: none;
-  direction: ltr;
-  text-align: left;
-}
-.input:focus {
-  border-color: var(--teal-400);
-  background: var(--white);
-  box-shadow: 0 0 0 3px rgba(31,128,128,0.10);
-}
-
-.textarea { resize: vertical; min-height: 110px; direction: rtl; text-align: right; }
-
-.result-box {
-  background: var(--teal-50);
-  border: 1.5px solid var(--teal-200, #a8d8d8);
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 24px;
-}
-.result-label { font-size: 13px; color: var(--neutral-500); }
-.result-value {
-  font-family: 'Cairo', sans-serif;
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--teal-700);
-}
-
-.compare-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding-top: 48px;
-}
-
-.vs-circle {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, var(--gold-500), var(--gold-300));
-  color: var(--white);
-  font-family: 'Cairo', sans-serif;
-  font-weight: 900;
-  font-size: 15px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-md);
-}
-
-.compare-btn { margin-top: 8px; }
-
-.winner-badge {
-  background: var(--teal-100);
-  color: var(--teal-700);
-  padding: 8px 16px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 700;
-  text-align: center;
-}
-.winner-badge.green {
-  background: rgba(46,213,115,0.12);
-  color: #1a7a42;
-}
-
-/* ===== CTA ===== */
-.cta-section { padding: 80px 0; }
-
-.cta-box {
-  background: linear-gradient(135deg, var(--teal-900), var(--teal-600));
-  border-radius: var(--radius-xl);
-  padding: 60px 40px;
-  text-align: center;
-  color: var(--white);
-  position: relative;
-  overflow: hidden;
-}
-.cta-box::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.cta-box h2 {
-  font-family: 'Cairo', sans-serif;
-  font-size: 32px;
-  font-weight: 900;
-  margin-bottom: 12px;
-  position: relative;
-}
-.cta-box p {
-  font-size: 16px;
-  color: rgba(255,255,255,0.75);
-  margin-bottom: 32px;
-  position: relative;
-}
-.cta-box .btn-white { position: relative; }
-
-/* ===== CONTACT ===== */
-.contact { background: var(--neutral-50); }
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 60px;
-  align-items: start;
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  padding-top: 8px;
-}
-
-.info-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-.info-icon { font-size: 28px; flex-shrink: 0; }
-.info-item strong {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--neutral-900);
-  display: block;
-  margin-bottom: 4px;
-}
-.info-item p { font-size: 14px; color: var(--neutral-500); }
-
-.contact-form {
-  background: var(--white);
-  border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--neutral-100);
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  background: var(--teal-900);
-  color: rgba(255,255,255,0.7);
-  padding: 50px 0 24px;
-}
-
-.footer-inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: center;
-  padding-bottom: 32px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  margin-bottom: 24px;
-}
-
-.footer-brand .logo { color: var(--white); margin-bottom: 10px; }
-.footer-brand p { font-size: 13px; color: rgba(255,255,255,0.5); }
-
-.footer-links {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.footer-links a {
-  font-size: 14px;
-  color: rgba(255,255,255,0.6);
-  transition: color var(--transition);
-}
-.footer-links a:hover { color: var(--white); }
-
-.footer-bottom {
-  text-align: center;
-  font-size: 13px;
-  color: rgba(255,255,255,0.35);
-}
-
-/* ===== FINANCE TABS ===== */
-.finance-tabs {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-}
-
-.tab-btn {
-  padding: 10px 22px;
-  border-radius: 100px;
-  border: 1.5px solid var(--neutral-200, #e0e0e0);
-  background: var(--white);
-  font-family: 'Cairo', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--neutral-500);
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.tab-btn:hover {
-  border-color: var(--teal-300);
-  color: var(--teal-600);
-}
-.tab-btn.active {
-  background: var(--teal-500);
-  border-color: var(--teal-500);
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(31,128,128,0.25);
-}
-
-/* ===== RESULTS DETAIL ===== */
-.results-detail {
-  margin-top: 32px;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-}
-
-.result-detail-card {
-  background: var(--white);
-  border: 1.5px solid var(--neutral-100);
-  border-radius: var(--radius-lg);
-  padding: 24px 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.winner-card {
-  background: var(--teal-900);
-  border-color: var(--teal-700);
-  color: var(--white);
-}
-
-.detail-title {
-  font-family: 'Cairo', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--teal-600);
-  margin-bottom: 16px;
-  padding-bottom: 10px;
-  border-bottom: 1.5px solid var(--teal-100);
-}
-
-.winner-card .detail-title {
-  color: var(--gold-300);
-  border-bottom-color: rgba(255,255,255,0.15);
-}
-
-.winner-title { color: var(--gold-300) !important; }
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  font-size: 13px;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-}
-
-.winner-card .detail-row {
-  border-bottom-color: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.8);
-}
-
-.detail-row span { color: var(--neutral-500); }
-.winner-card .detail-row span { color: rgba(255,255,255,0.55); }
-.detail-row strong { font-size: 14px; font-weight: 700; }
-.winner-card .detail-row strong { color: var(--white); }
-
-.red  { color: #e05252 !important; }
-.green { color: #1a7a42 !important; }
-.winner-card .green { color: #7eeaad !important; }
-.winner-card .red   { color: #ffaaaa !important; }
-
-/* ===== SMART ADVICE ===== */
-.advice-section {
-  margin-top: 36px;
-  background: var(--white);
-  border-radius: var(--radius-xl);
-  padding: 32px 28px;
-  border: 1.5px solid var(--gold-100);
-  box-shadow: var(--shadow-md);
-}
-
-.advice-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.advice-icon { font-size: 28px; }
-
-.advice-header h3 {
-  font-family: 'Cairo', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--neutral-900);
-  flex: 1;
-}
-
-.advice-tag {
-  background: var(--gold-100);
-  color: var(--gold-500);
-  padding: 4px 12px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.advice-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.advice-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 18px 20px;
-  border-radius: var(--radius-md);
-  border: 1.5px solid transparent;
-  transition: all var(--transition);
-}
-
-.advice-card:hover { transform: translateX(-4px); }
-
-.advice-boost      { background: #f0faf5; border-color: #b8e8d0; }
-.advice-annual     { background: #f5f0fa; border-color: #d0b8e8; }
-.advice-rate       { background: #fff5f0; border-color: #e8c8b8; }
-.advice-duration   { background: #fafaf0; border-color: #e0e8b8; }
-.advice-downpayment{ background: #f0f5fa; border-color: #b8cce8; }
-.advice-compare    { background: var(--teal-50); border-color: var(--teal-200, #a8d8d8); }
-
-.advice-card-icon {
-  font-size: 26px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.advice-card-content strong {
-  display: block;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--neutral-900);
-  margin-bottom: 6px;
-}
-
-.advice-card-content p {
-  font-size: 14px;
-  color: var(--neutral-600, #555);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .features-grid { grid-template-columns: repeat(2, 1fr); }
-  .compare-card { grid-template-columns: 1fr; }
-  .compare-center { flex-direction: row; padding-top: 0; }
-  .vs-circle { width: 44px; height: 44px; font-size: 13px; }
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .hero-visual { display: none; }
-  .steps { flex-direction: column; align-items: stretch; }
-  .step-arrow { transform: rotate(90deg); text-align: center; }
-  .step { max-width: 100%; }
-  .results-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 640px) {
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    left: 0;
-    background: var(--white);
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
-    border-bottom: 1px solid var(--neutral-100);
-    box-shadow: var(--shadow-md);
-  }
-  .nav-links.open { display: flex; }
-  .nav-links a { text-align: center; padding: 12px; border-radius: var(--radius-sm); }
-  .menu-toggle { display: flex; }
-  .btn-nav { display: none; }
-  .navbar { position: relative; }
-
-  .features-grid { grid-template-columns: 1fr; }
-  .hero { min-height: auto; padding: 60px 0; }
-  .hero-title { font-size: 32px; }
-  .hero-actions { flex-direction: column; }
-  .hero-stats { gap: 16px; }
-
-  .compare-card { padding: 28px 20px; }
-  .section { padding: 60px 0; }
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ميزان — قارن واختر بثقة</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">⚖️</span>
+        <span class="logo-text">ميزان</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">المميزات</a>
+        <a href="#how">كيف يعمل</a>
+        <a href="#compare">المقارنة</a>
+        <a href="#contact">تواصل</a>
+      </nav>
+      <a href="#compare" class="btn btn-nav">ابدأ الآن</a>
+      <button class="menu-toggle" aria-label="القائمة">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg-shape shape-1"></div>
+    <div class="hero-bg-shape shape-2"></div>
+    <div class="container hero-inner">
+      <div class="hero-badge">🇸🇦 مصمم للسوق السعودي</div>
+      <h1 class="hero-title">
+        قارن. حلّل.
+        <span class="highlight">قرّر بثقة.</span>
+      </h1>
+      <p class="hero-subtitle">
+        ميزان يساعدك على مقارنة الخيارات المالية والتمويلية بشكل شفاف وبسيط،<br />
+        سواء كنت تبحث عن أفضل تمويل، أو تقارن عروضًا متعددة.
+      </p>
+      <div class="hero-actions">
+        <a href="#compare" class="btn btn-primary">ابدأ المقارنة مجانًا</a>
+        <a href="#how" class="btn btn-secondary">كيف يعمل؟</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">+500</span>
+          <span class="stat-label">مستخدم</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">+1200</span>
+          <span class="stat-label">مقارنة منجزة</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">مجاني</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="card-float card-a">
+        <div class="card-label">خيار أ</div>
+        <div class="card-value">١٢٠٠ ر.س / شهر</div>
+        <div class="card-tag green">الأوفر</div>
+      </div>
+      <div class="card-float card-b">
+        <div class="card-label">خيار ب</div>
+        <div class="card-value">١٥٠٠ ر.س / شهر</div>
+        <div class="card-tag gray">أعلى تكلفة</div>
+      </div>
+      <div class="vs-badge">VS</div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">لماذا ميزان؟</span>
+        <h2 class="section-title">أدوات تساعدك تتخذ القرار الصح</h2>
+        <p class="section-desc">كل ما تحتاجه لمقارنة الخيارات المالية في مكان واحد</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>مقارنة مرئية</h3>
+          <p>شاهد الفرق بين الخيارات بشكل واضح ومرئي دون تعقيد</p>
+        </div>
+        <div class="feature-card featured">
+          <div class="feature-icon">🧮</div>
+          <h3>حسابات تلقائية</h3>
+          <p>أدخل الأرقام واحصل على النتيجة فورًا — بدون جداول Excel</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>خصوصية تامة</h3>
+          <p>بياناتك لا تُحفظ ولا تُشارك — كل شيء يبقى عندك</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>يعمل على الجوال</h3>
+          <p>صُمم ليعمل بشكل مثالي على جميع الأجهزة والشاشات</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>سريع وبسيط</h3>
+          <p>لا تسجيل، لا انتظار — ابدأ المقارنة مباشرة</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🇸🇦</div>
+          <h3>بالريال السعودي</h3>
+          <p>كل الحسابات مبنية على بيئة السوق السعودي والعملة المحلية</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how section" id="how">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">الطريقة</span>
+        <h2 class="section-title">ثلاث خطوات فقط</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">١</div>
+          <div class="step-content">
+            <h3>أدخل بياناتك</h3>
+            <p>أدخل تفاصيل كل خيار — المبلغ، المدة، نسبة الفائدة أو أي متغيرات أخرى</p>
+          </div>
+        </div>
+        <div class="step-arrow">←</div>
+        <div class="step">
+          <div class="step-num">٢</div>
+          <div class="step-content">
+            <h3>شوف النتيجة</h3>
+            <p>ميزان يحسب ويعرض الفرق بين الخيارات بشكل واضح ومباشر</p>
+          </div>
+        </div>
+        <div class="step-arrow">←</div>
+        <div class="step">
+          <div class="step-num">٣</div>
+          <div class="step-content">
+            <h3>قرّر بثقة</h3>
+            <p>اختر الخيار الأفضل بناءً على أرقام حقيقية لا تخمين</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPARE SECTION ===== -->
+  <section class="compare-section section" id="compare">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">جرّب الآن</span>
+        <h2 class="section-title">أداة المقارنة السريعة</h2>
+        <p class="section-desc">قارن بين خيارين تمويليين واعرف أيهما أوفر</p>
+      </div>
+
+      <!-- نوع التمويل -->
+      <div class="finance-tabs">
+        <button class="tab-btn active" onclick="setType('personal', this)">💳 تمويل شخصي</button>
+        <button class="tab-btn" onclick="setType('realestate', this)">🏠 تمويل عقاري</button>
+        <button class="tab-btn" onclick="setType('car', this)">🚗 تمويل سيارة</button>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-col">
+          <h3 class="col-title">الخيار الأول</h3>
+          <div class="input-group">
+            <label>المبلغ الإجمالي (ر.س)</label>
+            <input type="number" placeholder="مثال: 500000" class="input" id="a-amount" />
+          </div>
+          <div class="input-group">
+            <label>عدد الأشهر</label>
+            <input type="number" placeholder="مثال: 240" class="input" id="a-months" />
+          </div>
+          <div class="input-group">
+            <label>نسبة الفائدة السنوية (%)</label>
+            <input type="number" placeholder="مثال: 5" class="input" id="a-rate" step="0.1" />
+          </div>
+          <div class="result-box" id="result-a">
+            <span class="result-label">القسط الشهري</span>
+            <span class="result-value">— ر.س</span>
+          </div>
+        </div>
+
+        <div class="compare-center">
+          <div class="vs-circle">VS</div>
+          <button class="btn btn-primary compare-btn" onclick="calculateComparison()">احسب الفرق</button>
+          <div class="winner-badge" id="winner-badge" style="display:none"></div>
+        </div>
+
+        <div class="compare-col">
+          <h3 class="col-title">الخيار الثاني</h3>
+          <div class="input-group">
+            <label>المبلغ الإجمالي (ر.س)</label>
+            <input type="number" placeholder="مثال: 500000" class="input" id="b-amount" />
+          </div>
+          <div class="input-group">
+            <label>عدد الأشهر</label>
+            <input type="number" placeholder="مثال: 300" class="input" id="b-months" />
+          </div>
+          <div class="input-group">
+            <label>نسبة الفائدة السنوية (%)</label>
+            <input type="number" placeholder="مثال: 7" class="input" id="b-rate" step="0.1" />
+          </div>
+          <div class="result-box" id="result-b">
+            <span class="result-label">القسط الشهري</span>
+            <span class="result-value">— ر.س</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== نتائج تفصيلية ===== -->
+      <div class="results-detail" id="results-detail" style="display:none">
+        <div class="results-grid">
+          <div class="result-detail-card" id="detail-a"></div>
+          <div class="result-detail-card winner-card" id="detail-winner"></div>
+          <div class="result-detail-card" id="detail-b"></div>
+        </div>
+      </div>
+
+      <!-- ===== النصائح الذكية ===== -->
+      <div class="advice-section" id="advice-section" style="display:none">
+        <div class="advice-header">
+          <span class="advice-icon">💡</span>
+          <h3>نصائح ميزان الذكية</h3>
+          <span class="advice-tag">مبنية على أرقامك</span>
+        </div>
+        <div class="advice-list" id="advice-list"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <h2>جاهز تقارن بشكل أذكى؟</h2>
+        <p>ميزان مجاني تمامًا — لا تسجيل ولا اشتراك</p>
+        <a href="#compare" class="btn btn-white">ابدأ الآن</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">تواصل</span>
+        <h2 class="section-title">عندك اقتراح أو سؤال؟</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="info-item">
+            <span class="info-icon">📧</span>
+            <div>
+              <strong>البريد الإلكتروني</strong>
+              <p>hello@meezan.sa</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">🐦</span>
+            <div>
+              <strong>تويتر</strong>
+              <p>@MeezanApp</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">💬</span>
+            <div>
+              <strong>واتساب</strong>
+              <p>متاح قريبًا</p>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="return false;">
+          <div class="input-group">
+            <label>الاسم</label>
+            <input type="text" placeholder="اسمك" class="input" />
+          </div>
+          <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" placeholder="email@example.com" class="input" />
+          </div>
+          <div class="input-group">
+            <label>رسالتك</label>
+            <textarea rows="4" placeholder="اكتب رسالتك هنا..." class="input textarea"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-width">إرسال</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-icon">⚖️</span>
+          <span class="logo-text">ميزان</span>
+        </a>
+        <p>أداة مقارنة مالية بسيطة وشفافة</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">المميزات</a>
+        <a href="#how">كيف يعمل</a>
+        <a href="#compare">المقارنة</a>
+        <a href="#contact">تواصل</a>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 ميزان — جميع الحقوق محفوظة</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== نوع التمويل =====
+    let financeType = 'personal';
+    function setType(type, btn) {
+      financeType = type;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // ===== حساب القسط =====
+    function monthly(amount, months, rate) {
+      if (!rate || rate === 0) return amount / months;
+      const r = rate / 100 / 12;
+      return (amount * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+    }
+
+    function totalCost(amount, months, rate) {
+      return monthly(amount, months, rate) * months;
+    }
+
+    function totalProfit(amount, months, rate) {
+      return totalCost(amount, months, rate) - amount;
+    }
+
+    // ===== تنسيق الأرقام =====
+    const fmt = (n) => n > 0 ? Math.round(n).toLocaleString('ar-SA') + ' ر.س' : '— ر.س';
+    const fmtMonths = (m) => {
+      const y = Math.floor(m / 12);
+      const mo = m % 12;
+      if (y > 0 && mo > 0) return `${y} سنة و${mo} أشهر`;
+      if (y > 0) return `${y} سنة`;
+      return `${mo} شهر`;
+    };
+
+    // ===== الحساب الرئيسي =====
+    function calculateComparison() {
+      const aA = parseFloat(document.getElementById('a-amount').value) || 0;
+      const aM = parseFloat(document.getElementById('a-months').value) || 0;
+      const aR = parseFloat(document.getElementById('a-rate').value) || 0;
+
+      const bA = parseFloat(document.getElementById('b-amount').value) || 0;
+      const bM = parseFloat(document.getElementById('b-months').value) || 0;
+      const bR = parseFloat(document.getElementById('b-rate').value) || 0;
+
+      if (!aA || !aM || !bA || !bM) {
+        alert('يرجى إدخال المبلغ وعدد الأشهر للخيارين');
+        return;
+      }
+
+      const mA = monthly(aA, aM, aR);
+      const mB = monthly(bA, bM, bR);
+      const tA = totalCost(aA, aM, aR);
+      const tB = totalCost(bA, bM, bR);
+      const pA = totalProfit(aA, aM, aR);
+      const pB = totalProfit(bA, bM, bR);
+
+      // نتيجة القسط
+      document.getElementById('result-a').innerHTML = `<span class="result-label">القسط الشهري</span><span class="result-value">${fmt(mA)}</span>`;
+      document.getElementById('result-b').innerHTML = `<span class="result-label">القسط الشهري</span><span class="result-value">${fmt(mB)}</span>`;
+
+      // الفائز
+      const badge = document.getElementById('winner-badge');
+      badge.style.display = 'block';
+      if (tA < tB) {
+        badge.innerHTML = '🏆 الخيار الأول أوفر';
+        badge.className = 'winner-badge green';
+      } else if (tB < tA) {
+        badge.innerHTML = '🏆 الخيار الثاني أوفر';
+        badge.className = 'winner-badge green';
+      } else {
+        badge.innerHTML = '⚖️ الخياران متساويان';
+        badge.className = 'winner-badge';
+      }
+
+      // تفاصيل النتائج
+      document.getElementById('results-detail').style.display = 'block';
+      document.getElementById('detail-a').innerHTML = `
+        <div class="detail-title">الخيار الأول</div>
+        <div class="detail-row"><span>القسط الشهري</span><strong>${fmt(mA)}</strong></div>
+        <div class="detail-row"><span>إجمالي المدفوع</span><strong>${fmt(tA)}</strong></div>
+        <div class="detail-row"><span>إجمالي الأرباح</span><strong class="red">${fmt(pA)}</strong></div>
+        <div class="detail-row"><span>مدة التمويل</span><strong>${fmtMonths(aM)}</strong></div>
+      `;
+      document.getElementById('detail-b').innerHTML = `
+        <div class="detail-title">الخيار الثاني</div>
+        <div class="detail-row"><span>القسط الشهري</span><strong>${fmt(mB)}</strong></div>
+        <div class="detail-row"><span>إجمالي المدفوع</span><strong>${fmt(tB)}</strong></div>
+        <div class="detail-row"><span>إجمالي الأرباح</span><strong class="red">${fmt(pB)}</strong></div>
+        <div class="detail-row"><span>مدة التمويل</span><strong>${fmtMonths(bM)}</strong></div>
+      `;
+      const saving = Math.abs(tA - tB);
+      const winnerLabel = tA < tB ? 'الخيار الأول' : tB < tA ? 'الخيار الثاني' : 'متساويان';
+      document.getElementById('detail-winner').innerHTML = `
+        <div class="detail-title winner-title">⚖️ الفرق بينهما</div>
+        <div class="detail-row"><span>الأوفر</span><strong class="green">${winnerLabel}</strong></div>
+        <div class="detail-row"><span>الفرق في التكلفة</span><strong class="green">${fmt(saving)}</strong></div>
+        <div class="detail-row"><span>الفرق في القسط</span><strong>${fmt(Math.abs(mA - mB))}</strong></div>
+        <div class="detail-row"><span>الفرق في الأرباح</span><strong class="red">${fmt(Math.abs(pA - pB))}</strong></div>
+      `;
+
+      // النصائح الذكية
+      generateAdvice(aA, aM, aR, mA, pA, tA, bA, bM, bR, mB, pB, tB);
+
+      // تمرير للنتائج
+      document.getElementById('results-detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ===== محرك النصائح الذكية =====
+    function generateAdvice(aA, aM, aR, mA, pA, tA, bA, bM, bR, mB, pB, tB) {
+      const advices = [];
+      const bestM  = tA <= tB ? mA : mB;
+      const bestA  = tA <= tB ? aA : bA;
+      const bestMo = tA <= tB ? aM : bM;
+      const bestR  = tA <= tB ? aR : bR;
+      const bestP  = tA <= tB ? pA : pB;
+
+      // 1. نصيحة زيادة القسط (لو المدة طويلة)
+      if (bestMo >= 36) {
+        const extraPayment = Math.round(bestM * 0.2 / 100) * 100;
+        const newMonthly = bestM + extraPayment;
+        // تقدير المدة الجديدة
+        const r = bestR / 100 / 12;
+        let newMonths = bestMo;
+        if (r > 0) {
+          newMonths = Math.round(-Math.log(1 - (bestA * r) / newMonthly) / Math.log(1 + r));
+        } else {
+          newMonths = Math.round(bestA / newMonthly);
+        }
+        const savedMonths = bestMo - newMonths;
+        const savedMoney = Math.round((bestMo - newMonths) * bestM);
+        if (savedMonths > 3 && savedMoney > 0) {
+          advices.push({
+            icon: '⬆️',
+            type: 'boost',
+            title: 'زيادة القسط توفّر عليك أكثر',
+            text: `لو زدت قسطك الشهري بـ ${fmt(extraPayment)} فقط، تختصر المدة بـ ${fmtMonths(savedMonths)} وتوفر حوالي ${fmt(savedMoney)} من الأرباح.`
+          });
+        }
+      }
+
+      // 2. نصيحة الدفعة السنوية الإضافية
+      if (bestMo >= 24) {
+        const annualExtra = Math.round(bestM * 1.5);
+        const savedFromAnnual = Math.round(annualExtra * 0.8);
+        advices.push({
+          icon: '🗓️',
+          type: 'annual',
+          title: 'دفعة سنوية إضافية',
+          text: `لو دفعت مبلغًا إضافيًا مرة بالسنة (مثل بدل إجازة أو مكافأة)، تقلل رصيد التمويل وتوفر على الأرباح — حتى ${fmt(savedFromAnnual)} سنويًا.`
+        });
+      }
+
+      // 3. نصيحة الفائدة العالية
+      const highRate = Math.max(aR, bR);
+      if (highRate >= 6) {
+        advices.push({
+          icon: '📉',
+          type: 'rate',
+          title: 'الفائدة مرتفعة — فكّر في إعادة التمويل',
+          text: `نسبة الفائدة ${highRate}% تُعتبر مرتفعة. بعد سنة أو سنتين، راجع السوق — لو انخفضت الفائدة، إعادة التمويل قد توفر عليك مبالغ كبيرة.`
+        });
+      }
+
+      // 4. نصيحة المدة الطويلة جدًا
+      if (bestMo > 240) {
+        advices.push({
+          icon: '⏳',
+          type: 'duration',
+          title: 'المدة طويلة — الأرباح تتضاعف',
+          text: `مدة ${fmtMonths(bestMo)} تعني أرباحًا إجمالية ${fmt(bestP)}. حتى تقليص ٦ أشهر فقط من المدة يوفر مبالغ ملموسة.`
+        });
+      }
+
+      // 5. نصيحة الدفعة الأولى (عقاري وسيارة)
+      if ((financeType === 'realestate' || financeType === 'car') && bestA > 100000) {
+        const downExtra = Math.round(bestA * 0.05);
+        const savedInterest = Math.round(downExtra * (bestR / 100) * (bestMo / 12) * 0.7);
+        advices.push({
+          icon: '🏦',
+          type: 'downpayment',
+          title: 'زيادة الدفعة الأولى',
+          text: `لو زدت الدفعة الأولى بـ ${fmt(downExtra)}، تنخفض التمويل ويقل القسط الشهري وتوفر حوالي ${fmt(savedInterest)} أرباح على مدى العقد.`
+        });
+      }
+
+      // 6. نصيحة المقارنة بين البنوك
+      advices.push({
+        icon: '🏛️',
+        type: 'compare',
+        title: 'قارن بين أكثر من بنك',
+        text: `حتى فرق ٠.٥٪ في الفائدة يساوي آلاف الريالات على المدى البعيد. لا تقبل بأول عرض — تفاوض أو قارن بين ٣ بنوك على الأقل.`
+      });
+
+      // عرض النصائح
+      const list = document.getElementById('advice-list');
+      list.innerHTML = advices.map(a => `
+        <div class="advice-card advice-${a.type}">
+          <div class="advice-card-icon">${a.icon}</div>
+          <div class="advice-card-content">
+            <strong>${a.title}</strong>
+            <p>${a.text}</p>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('advice-section').style.display = 'block';
+    }
+
+    // Mobile menu toggle
+    document.querySelector('.menu-toggle')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('open');
+    });
+  </script>
+
+</body>
+</html>
