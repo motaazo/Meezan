@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartRFQ - أتمتة المشتريات بالذكاء الاصطناعي</title>
+    <style>
+        /* إعدادات الخطوط والألوان العامة */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #10b981;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* الهيدر وقسم البداية (Hero Section) */
+        header {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--bg-white);
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+            color: var(--primary-hover);
+        }
+
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg-light) 100%);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* الأقسام العامة */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* قسم الفكرة الأساسية */
+        .concept-box {
+            background-color: var(--bg-white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .concept-box p {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .highlight-item {
+            padding: 15px;
+            background-color: var(--bg-light);
+            border-radius: var(--radius);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* قسم المميزات (Badges) */
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .badge-icon {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* قسم كيف يعمل */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            position: relative;
+        }
+
+        .step-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: var(--radius);
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            background-color: var(--secondary);
+            color: var(--bg-white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .step-card h3 {
+            margin: 15px 0 10px 0;
+            font-size: 20px;
+            color: var(--text-main);
+        }
+
+        .step-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* قسم الأسعار */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .pricing-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .pricing-card.popular {
+            border: 2px solid var(--primary);
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: var(--bg-white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .price-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .price-cost {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .price-cost span {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: right;
+            flex-grow: 1;
+        }
+
+        .price-features li {
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-features li::before {
+            content: "✓";
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* فوتر */
+        footer {
+            background-color: var(--bg-white);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* التجاوب مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .pricing-card.popular { transform: none; }
+            .pricing-grid { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">Smart<span>RFQ</span></div>
+            <a href="#cta-section" class="btn">انضم لقائمة الانتظار</a>
+        </div>
+    </header>
+
+    <!-- قسم البداية والترحيب -->
+    <section class="hero">
+        <div class="container">
+            <h1>منصة ذكية لمقارنة عروض الأسعار والتفاوض في <span>ثوانٍ معدودة</span></h1>
+            <p>وداعاً للجداول اليدوية المعقدة. ارفع ملفات عروض الأسعار بصيغة PDF ودع الذكاء الاصطناعي يتولى التحليل، المقارنة، وصياغة خطابات التفاوض الفعّالة فوراً.</p>
+            <a href="#cta-section" class="btn">احجز مقعدك في الإطلاق التجريبي</a>
+        </div>
+    </section>
+
+    <!-- قسم الفكرة الأساسية -->
+    <section id="concept" style="background-color: #fff;">
+        <div class="container">
+            <div class="section-title">
+                <h2>الفكرة الأساسية</h2>
+                <p>كيف يعيد SmartRFQ صياغة عمليات المشتريات للشركات؟</p>
+            </div>
+            <div class="concept-box">
+                <p>يعاني مسؤولو المشتريات ومدراء المالية من هدر ما يقارب 15 ساعة أسبوعيًا في نقل البيانات يدويًا من عروض الأسعار الورقية أو ملفات PDF إلى جداول Excel لمقارنتها. يأتي تطبيق <strong>SmartRFQ</strong> ليكون الطبقة الذكية والخفيفة التي تحول هذا العمل الشاق إلى عملية مؤتمتة بالكامل؛ حيث يستخرج تفاصيل البنود والشروط والأسعار بدقة، ويمنحك مصفوفة مقارنة فورية وموحدة تدعم قراراتك الاستثمارية والمالية دون تعقيد.</p>
+                <div class="highlight-grid">
+                    <div class="highlight-item">توفير 80% من وقت الفحص</div>
+                    <div class="highlight-item">تجنب أخطاء النقل اليدوي</div>
+                    <div class="highlight-item">اتخاذ قرارات شراء مدعومة بالبيانات</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المميزات في شكل Badges -->
+    <section id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>المميزات الذكية</h2>
+                <p>كل ما تحتاجه لإدارة عروض الأسعار بكفاءة متناهية</p>
+            </div>
+            <div class="features-grid">
+                <div class="badge"><span class="badge-icon">✦</span> سحب وتحليل عروض الأسعار تلقائياً</div>
+                <div class="badge"><span class="badge-icon">✦</span> مصفوفة مقارنة موحدة وفورية</div>
+                <div class="badge"><span class="badge-icon">✦</span> توليد نصوص تفاوضية مخصصة وعالية الاحترافية</div>
+                <div class="badge"><span class="badge-icon">✦</span> دعم قراءة المستندات وملفات PDF والصور</div>
+                <div class="badge"><span class="badge-icon">✦</span> عزل تام وحماية فائقة لبيانات الموردين والشركات</div>
+                <div class="badge"><span class="badge-icon">✦</span> تقارير سريعة لدعم قرارات الإدارة المالية</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم كيف يعمل -->
+    <section id="how-it-works" style="background-color: #fff;">
+        <div class="container">
+            <div class="section-title">
+                <h2>كيف يعمل التطبيق؟</h2>
+                <p>خطوات بسيطة تفصلك عن أتمتة مشترياتك بالكامل</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>رفع العروض</h3>
+                    <p>التقط صورة لعرض السعر أو ارفع ملف الـ PDF مباشرة من هاتفك المحمول أو حاسوبك.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>التحليل الفوري</h3>
+                    <p>يقوم محرك الذكاء الاصطناعي باستخراج الأسعار، البنود، كميات التوريد، والتواريخ بدقة غاية في المتناهية.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>لوحة المقارنة</h3>
+                    <p>استعرض مصفوفة مقارنة موحدة تعرض لك الفروقات بين الموردين بوضوح تام وجدول منسق.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>التفاوض الذكي</h3>
+                    <p>احصل على نصوص تفاوضية جاهزة للنسخ بناءً على نقاط الضعف والقوة في العروض لترسلها للموردين فوراً.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم خطط الأسعار -->
+    <section id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>خطط الأسعار المرنة</h2>
+                <p>اختر الخطة المناسبة لحجم أعمالك وابدأ في خفض تكاليف المشتريات اليوم</p>
+            </div>
+            <div class="pricing-grid">
+                <!-- الخطة المجانية -->
+                <div class="pricing-card">
+                    <div class="price-name">الباقة المجانية</div>
+                    <div class="price-cost">$0 <span>/ شهرياً</span></div>
+                    <ul class="price-features">
+                        <li>مقارنة عرضين أسعار شهرياً</li>
+                        <li>استخراج البنود الأساسية</li>
+                        <li>لوحة مقارنة مبسطة</li>
+                        <li>مستخدم واحد فقط</li>
+                    </ul>
+                    <a href="#cta-section" class="btn btn-secondary">ابدأ مجاناً</a>
+                </div>
+                <!-- الخطة الاحترافية -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">الأكثر طلباً</div>
+                    <div class="price-name">الباقة الاحترافية</div>
+                    <div class="price-cost">$59 <span>/ شهرياً (فاتورة سنوية)</span></div>
+                    <ul class="price-features">
+                        <li>رفع ومقارنة عروض غير محدودة</li>
+                        <li>توليد نصوص تفاوض ذكية بالذكاء الاصطناعي</li>
+                        <li>تحليلات متقدمة لشروط الدفع والتسليم</li>
+                        <li>دعم حتى 3 مستخدمين للمنشأة</li>
+                        <li>دعم فني ذو أولوية</li>
+                    </ul>
+                    <a href="#cta-section" class="btn">انضم للقائمة الاحترافية</a>
+                </div>
+                <!-- خطة الشركات -->
+                <div class="pricing-card">
+                    <div class="price-name">باقة المنشآت والشركات</div>
+                    <div class="price-cost">$299+ <span>/ شهرياً</span></div>
+                    <ul class="price-features">
+                        <li>كل مميزات الباقة الاحترافية</li>
+                        <li>ربط مباشر مع أنظمة ERP (مثل NetSuite و SAP)</li>
+                        <li>تخصيص كامل لسياسات الشراء الداخلية</li>
+                        <li>تصدير البيانات المتقدمة بصيغ CSV و Excel</li>
+                        <li>مدير حساب مخصص واتفاقية مستوى الخدمة SLA</li>
+                    </ul>
+                    <a href="#cta-section" class="btn btn-secondary">تواصل معنا</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم دعوة للاشتراك بقائمة الانتظار -->
+    <section id="cta-section" style="background-color: #fff; text-align: center;">
+        <div class="container">
+            <div class="section-title" style="margin-bottom: 30px;">
+                <h2>كن أول المستفيدين من التحديثات</h2>
+                <p>نحن نقوم ببناء وتطوير SmartRFQ الآن لمساعدتك على قيادة مشتريات منشأتك بذكاء واحترافية. احجز مكانك الآن في قائمة الانتظار الحصرية.</p>
+            </div>
+            <div style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-light);">
+                <p style="font-weight: 600; margin-bottom: 15px; color: var(--primary);">🚀 التسجيل مفتوح لفترة محدودة</p>
+                <a href="mailto:earlyaccess@smartrfq.com?subject=Join Waitlist" class="btn" style="width: 100%;">انضم لقائمة الانتظار</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SmartRFQ. جميع الحقوق محفوظة. منصة ذكية لتطوير وإدارة مشترياتك السريعة.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
